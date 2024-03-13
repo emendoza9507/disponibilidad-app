@@ -16,18 +16,6 @@ class AppLayout extends Component
                 'href' => 'dashboard'
             ],
             (object) [
-                'label' => 'Connecciones',
-                'icon' => 'connections',
-                'href' => 'connections.index',
-                'can' => 'connections.index'
-            ],
-            (object) [
-                'label' => 'Usuarios',
-                'icon' => 'users',
-                'href' => 'users.index',
-                'can' => 'users.index'
-            ],
-            (object) [
                 'label' => 'Departamentos',
                 'icon' => 'departments',
                 'href' => 'departamentos.index',
@@ -43,7 +31,41 @@ class AppLayout extends Component
                 'icon' => 'settings',
                 'href' => 'neumatico.index',
                 'can' => 'neumatico.index'
-            ]
+            ],
+            (object) [
+                'label' => 'Reportes',
+                'icon' => 'report',
+                'dropdown' => [
+                    (object) [
+                        'label' => 'Baterias',
+                        'icon' => 'check',
+                        'href' => 'reporte.bateria.index'
+                    ],
+                    (object) [
+                        'label' => 'Neumaticos',
+                        'icon' => 'check',
+                        'href' => 'reporte.neumatico.index'
+                    ]
+                ]
+            ],
+            (object) [
+                'label' => 'Configuracion',
+                'icon' => 'report',
+                'dropdown' => [
+                    (object) [
+                        'label' => 'Connecciones',
+                        'icon' => 'connections',
+                        'href' => 'connections.index',
+                        'can' => 'connections.index'
+                    ],
+                    (object) [
+                        'label' => 'Usuarios',
+                        'icon' => 'users',
+                        'href' => 'users.index',
+                        'can' => 'users.index'
+                    ],
+                ]
+            ],
         ];
     }
 

@@ -3,6 +3,9 @@
 use App\Http\Controllers\AutoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\NeumaticoController;
+use App\Http\Controllers\Reportes\RBateriaController;
+use App\Http\Controllers\Reportes\RNeumaticoController;
+use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConnectionController;
@@ -44,4 +47,10 @@ Route::middleware([
     Route::resource('departamentos', DepartamentoController:: class)->only('index');
     Route::resource('autos', AutoController:: class)->only('index');
     Route::resource('neumatico', NeumaticoController:: class)->only('index');
+    Route::resource('reportes', ReportesController::class)->only('index');
+
+    Route::name('reporte.')->group(function () {
+        Route::resource('reporte/bateria',RBateriaController::class)->only('index');
+        Route::resource('reporte/neumatico',RNeumaticoController::class)->only('index');
+    });
 });

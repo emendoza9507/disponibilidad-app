@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Helpers\ResetDB;
 use App\Livewire\OrdenTrabajo\Materiales;
 use App\Models\Mistral\OrdenTrabajo;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Config;
 
 class NeumaticosService
 {
@@ -37,6 +39,9 @@ class NeumaticosService
     }
     public function resumenBaterias($start_date, $end_date)
     {
+        $connection = (object) session('connection', Config::get('database.connections.taller'));
+        ResetDB::setDBConfig('taller', (array) $connection);
+
         $fch_start = Carbon::create(Carbon::createFromDate($start_date)->format('d-m-Y h:m:s'));
         $fch_end = Carbon::create(Carbon::createFromDate($end_date)->format('d-m-Y h:m:s'));
 
