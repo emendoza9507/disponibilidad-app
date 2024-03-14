@@ -20,6 +20,8 @@
                         <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date->format('Y-m-d')}}"/>
 
                         <x-button class="rounded-none h-full">GENERAR</x-button>
+
+                        <x-button id="btn-alerta" type="button" class="rounded-none h-full bg-red-400">ALERTAS</x-button>
                     </div>
                     <select name="connection_id">
                         @foreach($connections as $connection)
@@ -32,47 +34,48 @@
 
                 <br>
 
-                <div>
+                <div style="max-height: 400px" class="overflow-y-auto">
                     <table class="w-full">
-                        <thead>
+                        <thead class="sticky top-0 bg-white">
                         <tr>
                             <th class="text-start uppercase" style="width: 150px">OT</th>
+                            <th class="text-start uppercase">ENTRADA</th>
                             <th class="text-start uppercase">MATRICULA</th>
                             <th class="text-end uppercase" style="width: 150px">Cantidad</th>
                         </tr>
                         </thead>
-                    </table>
-                </div>
-
-                <div style="max-height: 400px" class="overflow-y-auto">
-                    <table class="w-full">
                         <tbody id="data-neumaticos" >
                         @php $total = 0  @endphp
                         @foreach($resumenNeumaticos as $key => $value)
                             @php $total += $value['neumaticos'] @endphp
-                            <tr class="@if($value['neumaticos'] > 4) text-red-400 @endif hover:bg-gray-300">
-                                <td class="pr-2" style="width: 150px">{{$key}}</td>
+                            <tr class="@if($value['neumaticos'] > 4) alert text-red-300 @endif hover:bg-gray-100">
+                                <td class="pr-2 py-2" style="width: 150px">
+                                    <a href="{{route('orden.show', $key)}}">{{$key}}</a>
+                                </td>
+                                <td class="pr-2">{{\Carbon\Carbon::create($value['ot']->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td class="pr-2">{{$value['ot']->MATRICULA}}</td>
-                                <td class="px-2 text-right" style="width: 150px">{{$value['neumaticos']}}</td>
+                                <td class="px-2 text-right">{{$value['neumaticos']}}</td>
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot class="sticky bottom-0 bg-white">
+                        <tr>
+                            <th class="text-left uppercase" style="width: 150px">Total</th>
+                            <td colspan="2"></td>
+                            <td class="px-2 text-right">{{$total}}</td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
-                <table class="mt-2 sticky bottom-0 bg-white w-full">
-                    <tr>
-                        <th colspan="5" class="text-left uppercase">Total</th>
-                        <td class="text-right px-6">{{$total}}</td>
-                    </tr>
-                </table>
-
             </div>
         </div>
     </x-container>
 </x-app-layout>
 <script>
+    let showAlertas = false;
     const $inputSearh = document.querySelector('#input-search');
     const $dataNeumaticos = document.querySelector('#data-neumaticos');
+    const $btnAlerta = document.querySelector('#btn-alerta');
 
     $inputSearh.addEventListener('keyup', () => {
         Array.from($dataNeumaticos.children).forEach(($tr => {
@@ -82,5 +85,21 @@
                 $tr.classList.add('hidden')
             }
         }))
+    })
+
+    $btnAlerta.addEventListener('click', () => {
+        showAlertas  = !showAlertas
+
+        Array.from($dataNeumaticos.children).forEach(($tr) => {
+            if(showAlertas) {
+                if(!$tr.classList.contains('alert')) {
+                    $tr.classList.add('hidden')
+                } else {
+                    $tr.classList.remove('hidden')
+                }
+            } else {
+                $tr.classList.remove('hidden')
+            }
+        })
     })
 </script>

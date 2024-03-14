@@ -18,7 +18,7 @@ class NeumaticosService
         $fch_start = Carbon::create(Carbon::createFromDate($start_date)->format('d-m-Y h:m:s'));
         $fch_end = Carbon::create(Carbon::createFromDate($end_date)->format('d-m-Y h:m:s'));
 
-        $ots = OrdenTrabajo::whereBetween('FECHAENTRADA', [$fch_start, $fch_end])->get();
+        $ots = OrdenTrabajo::whereBetween('FECHAENTRADA', [$fch_start, $fch_end])->orderBy('CODIGOOT', 'DESC')->get();
 
         $result = [];
 
@@ -48,7 +48,7 @@ class NeumaticosService
         $fch_start = Carbon::create(Carbon::createFromDate($start_date)->format('d-m-Y h:m:s'));
         $fch_end = Carbon::create(Carbon::createFromDate($end_date)->format('d-m-Y h:m:s'));
 
-        $ots = OrdenTrabajo::whereBetween('FECHAENTRADA', [$fch_start, $fch_end])->get();
+        $ots = OrdenTrabajo::whereBetween('FECHAENTRADA', [$fch_start, $fch_end])->orderBy('CODIGOOT', 'DESC')->get();
 
         $result = [];
 

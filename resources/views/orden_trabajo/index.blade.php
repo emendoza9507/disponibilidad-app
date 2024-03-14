@@ -31,50 +31,23 @@
 
                 <br>
 
-                <div style="max-height: 400px" class="overflow-y-auto">
-                    <table class="w-full">
-                        <thead>
-                        <tr>
-                            <th class="text-start uppercase">OT</th>
-                            <th class="text-start uppercase">MATRICULA</th>
-                            <th class="text-start uppercase">ENTRADA</th>
-                            <th class="text-start uppercase">SALIDA</th>
-                            <th class="text-start uppercase">ESTADO</th>
-                            <th class="text-start uppercase">IMPORTE</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="data-ordenes" >
-                            @foreach($ordenes as $ot)
-                                <tr class="hover:bg-gray-400">
-                                    <td>{{$ot->CODIGOOT}}</td>
-                                    <td>{{$ot->MATRICULA}}</td>
-                                    <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
-                                    <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
-                                    <td>
-                                        <span class="px-2 select-none rounded-2xl text-white @if($ot->FECHACIERRE == null) bg-green-500 @else  bg-red-400  @endif">
-                                            {{$ot->FECHACIERRE == null ? 'abierta' : 'cerrada'}}
-                                        </span>
-                                    </td>
-                                    <td>{{number_format($ot->IMPORTESERVICIO, 2)}}</td>
-                                    <td>
-                                        <a href="{{route('orden.show', $ot->CODIGOOT)}}">
-                                            @include('icons.settings')
-                                        </a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <table class="mt-2 sticky bottom-0 bg-white w-full">
-                    <tr>
-                        <th colspan="5" class="text-left uppercase">Total</th>
-{{--                        <td class="text-right px-2">{{$total}}</td>--}}
-                    </tr>
-                </table>
+                @include('orden_trabajo.list')
 
             </div>
         </div>
     </x-container>
 </x-app-layout>
+<script>
+    const $inputSearh = document.querySelector('#input-search');
+    const $dataNeumaticos = document.querySelector('#data-ordenes');
+
+    $inputSearh.addEventListener('keyup', () => {
+        Array.from($dataNeumaticos.children).forEach(($tr => {
+            if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().toLowerCase())) {
+                $tr.classList.remove('hidden')
+            } else {
+                $tr.classList.add('hidden')
+            }
+        }))
+    })
+</script>

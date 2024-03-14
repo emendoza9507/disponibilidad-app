@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Ordenes de Trabajo') }}
+            {{ __('Orden de Trabajo') }}
         </h2>
     </x-slot>
 
@@ -16,19 +16,24 @@
                             <span>{{$ot->CODIGOOT}}</span>
                         </div>
 
+                        <div class="flex text-xl justify-between">
+                            <h3 class="font-bold">MATRICULA:</h3>
+                            <a href="{{route('autos.show', $ot->CODIGOM)}}" class="underline">{{$ot->MATRICULA}}</a>
+                        </div>
+
                         <div class="flex text-xl  justify-between">
                             <h3 class="font-bold">ENTRADA:</h3>
-                            <span>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('(h:m) d-m-Y')}}</span>
+                            <span>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('(h:m) d/m/Y')}}</span>
                         </div>
 
                         <div class="flex text-xl  justify-between">
                             <h3 class="font-bold">SALIDA:</h3>
-                            <span>{{$ot->FECHASALIDA ?: \Carbon\Carbon::create($ot->FECHASALIDA)->format('(h:m) d-m-Y')}}</span>
+                            <span>{{$ot->FECHASALIDA != null ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('(h:m) d/m/Y') : ''}}</span>
                         </div>
 
                         <div class="flex text-xl  justify-between">
                             <h3 class="font-bold">ESTADO:</h3>
-                            <span>{{$ot->FECHACIERRE == null ? 'Abierta' : 'Cerrada'}}</span>
+                            <span class="uppercase @if($ot->FECHACIERRE == null) text-green-500 @else text-red-500 @endif">{{$ot->FECHACIERRE == null ? 'Abierta' : 'Cerrada'}}</span>
                         </div>
                     </div>
 
@@ -41,13 +46,15 @@
                             <tr>
                                 <th class="text-start">DESCRIPCION</th>
                                 <th class="text-end">CANTIDAD</th>
+                                <th class="text-end">IMPORTE</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($ot->materials as $material)
-                                <tr>
+                                <tr class="hover:bg-gray-300">
                                     <td>{{$material->DESCRIPCION}}</td>
                                     <td class="text-end">{{number_format($material->CANTIDAD, 2)}}</td>
+                                    <td class="text-end">{{number_format($material->IMPORTELINEA)}}$</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -60,12 +67,14 @@
                             <thead>
                             <tr>
                                 <th class="text-start">DESCRIPCION</th>
+                                <th class="text-end">IMPORTE</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($ot->manoObras as $mano_obra)
-                                <tr>
+                                <tr  class="hover:bg-gray-300">
                                     <td>{{$mano_obra->DESCRIPCION}}</td>
+                                    <td class="text-end">{{number_format($mano_obra->IMPORTELINEA, 2)}}$</td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -74,7 +83,7 @@
                     <table class="mt-2 sticky bottom-0 bg-white w-full">
                         <tr>
                             <th colspan="5" class="text-left uppercase">IMPORTE</th>
-                            <td class="text-right px-2">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
+                            <td class="text-right">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
                         </tr>
                     </table>
                 @endif

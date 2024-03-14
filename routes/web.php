@@ -46,7 +46,7 @@ Route::middleware([
     });
 
     Route::resource('departamentos', DepartamentoController:: class)->only('index');
-    Route::resource('autos', AutoController:: class)->only('index');
+    Route::resource('autos', AutoController:: class)->only(['index', 'show']);
     Route::resource('neumatico', NeumaticoController:: class)->only('index');
     Route::resource('reportes', ReportesController::class)->only('index');
 

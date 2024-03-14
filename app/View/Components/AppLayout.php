@@ -43,12 +43,12 @@ class AppLayout extends Component
                     ],
                     (object) [
                         'label' => 'Baterias',
-                        'icon' => 'check',
+                        'icon' => 'battery',
                         'href' => 'reporte.bateria.index'
                     ],
                     (object) [
                         'label' => 'Neumaticos',
-                        'icon' => 'check',
+                        'icon' => 'lifebuoy',
                         'href' => 'reporte.neumatico.index'
                     ]
                 ]
@@ -58,7 +58,7 @@ class AppLayout extends Component
                 'icon' => 'report',
                 'dropdown' => [
                     (object) [
-                        'label' => 'Connecciones',
+                        'label' => 'Conecciones',
                         'icon' => 'connections',
                         'href' => 'connections.index',
                         'can' => 'connections.index'

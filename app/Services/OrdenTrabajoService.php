@@ -26,4 +26,12 @@ class OrdenTrabajoService
 
         return OrdenTrabajo::where('CODIGOOT', $codigoot)->first();
     }
+
+    public function getByMaestro(string $codigom)
+    {
+        $connection = (object) session('connection', Config::get('database.connections.taller'));
+        ResetDB::setDBConfig('taller', (array) $connection);
+
+        return OrdenTrabajo::where('CODIGOM', $codigom)->orderBy('FECHAENTRADA', 'DESC')->get();
+    }
 }
