@@ -97,7 +97,7 @@
                 </div>
                 @else
                     <div class="mt-5">
-                        <h3 class="uppercase text-red-400">Sin Ordenes de Trabajo en el taller: {{session('connection')['taller']}}</h3>
+                        <h3 class="uppercase text-red-400">Sin Ordenes de Trabajo en el taller: {{$connection->name}}</h3>
                     </div>
                 @endisset
             </div>

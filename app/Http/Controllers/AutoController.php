@@ -31,7 +31,9 @@ class AutoController extends Controller
         if(isset($matricula)) {
             try {
                 $autos = $autoService->find($matricula);
-            } catch (\Exception $exception) {}
+            } catch (\Exception $exception) {
+                return redirect(route('autos.index'))->with('error', $exception->getMessage());
+            }
         }
 
         return view('auto.index', compact(
@@ -59,20 +61,24 @@ class AutoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Maestro $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
+    public function show(Request $request, string $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
     {
         $session_connection = session('connection');
         $connections = Connection::all();
         $connection_id = $request->query->get('connection_id') ?: (isset($session_connection['connection_id']) ? $session_connection['connection_id'] :  $connections[0]->id);
-        $connectionService->setConnection($connection_id);
+        $connection = $connectionService->setConnection($connection_id);
 
         $ordenes = [];
         try {
+            $auto = Maestro::find($auto);
+
             $ordenes = $ordenTrabajoService->getByMaestro($auto->CODIGOM);
-        } catch (\Exception $exception) {}
+        } catch (\Exception $exception) {
+            return redirect(route('autos.index'))->with('error', $exception->getMessage());
+        }
 
         return view('auto.show', compact(
-            'auto', 'ordenes', 'connections', 'connection_id'
+            'auto', 'ordenes', 'connections', 'connection_id', 'connection'
         ));
     }
 

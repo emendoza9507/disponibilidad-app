@@ -12,4 +12,9 @@ class ManoObra extends Model
     protected $primaryKey = 'CODIGOOT';
     protected $table = 'mano_obra';
     protected $connection = 'taller';
+
+    public function operario()
+    {
+        return $this->hasOne(Operario::class,'CODIGO', 'OPERARIO');
+    }
 }

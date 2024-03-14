@@ -5,6 +5,16 @@
         </h2>
     </x-slot>
 
+   @isset($error)
+        <x-container>
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+                    {{$error}}
+                </div>
+            </div>
+        </x-container>
+   @endisset
+
     <x-container>
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
