@@ -27,12 +27,6 @@ class AppLayout extends Component
                 'href' => 'autos.index',
             ],
             (object) [
-                'label' => 'Neumaticos',
-                'icon' => 'settings',
-                'href' => 'neumatico.index',
-                'can' => 'neumatico.index'
-            ],
-            (object) [
                 'label' => 'Consecutivos',
                 'icon' => 'report',
                 'dropdown' => [
