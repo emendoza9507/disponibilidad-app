@@ -2,6 +2,7 @@
 
 namespace App\Models\Mistral;
 
+use App\Models\Bateria;
 use App\Models\Neumatico;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,8 +25,13 @@ class OrdenTrabajo extends Model
         return $this->hasMany(ManoObra::class, 'CODIGOOT', 'CODIGOOT');
     }
 
-    public function neumaticos()
+    public function consecutivoNeumaticos()
     {
         return $this->hasMany(Neumatico::class, 'CODIGOOT', 'CODIGOOT');
+    }
+
+    public function consecutivoBaterias()
+    {
+        return $this->hasMany(Bateria::class, 'CODIGOOT', 'CODIGOOT');
     }
 }

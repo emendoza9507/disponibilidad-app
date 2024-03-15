@@ -5,7 +5,11 @@
         </h2>
     </x-slot>
 
+
     <x-container>
+
+        @include('partials.messages')
+
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
                 <form class="flex gap-2 justify-between" action="{{route('orden.index')}}">
@@ -32,7 +36,6 @@
                 <br>
 
                 @include('orden_trabajo.list')
-
             </div>
         </div>
     </x-container>

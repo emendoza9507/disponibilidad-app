@@ -33,6 +33,22 @@ class AppLayout extends Component
                 'can' => 'neumatico.index'
             ],
             (object) [
+                'label' => 'Consecutivos',
+                'icon' => 'report',
+                'dropdown' => [
+                    (object) [
+                        'label' => 'Baterias',
+                        'icon' => 'battery',
+                        'href' => 'consecutivo.bateria.index'
+                    ],
+                    (object) [
+                        'label' => 'Neumaticos',
+                        'icon' => 'lifebuoy',
+                        'href' => 'consecutivo.neumatico.index'
+                    ]
+                ]
+            ],
+            (object) [
                 'label' => 'Reportes',
                 'icon' => 'report',
                 'dropdown' => [

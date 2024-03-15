@@ -3,6 +3,8 @@ import './bootstrap';
 
 
 function reportPrint($btnPrint, $areaPrint) {
+    const hostame = location.hostname
+
     $btnPrint.addEventListener('click', () => {
         const $printer = window.open('', this, "width=800,height=600,menubar=NO")
 
@@ -23,7 +25,9 @@ function reportPrint($btnPrint, $areaPrint) {
         $printer.addEventListener('focusout', () => $printer.close())
         $printer.addEventListener('afterprint', () => $printer.close())
 
-        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://disponibilidad.local/app.css">`
+        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://${hostame}/app.css">
+            <script src="http://${hostame}/app.js"></script>
+        `
 
         // Array.from($printer.document.body.getElementsByClassName('print:hidden')).forEach(node => node.classList.add('hidden'))
         Array.from($printer.document.body.getElementsByClassName('print:block')).forEach(node => node.classList.remove('hidden'))

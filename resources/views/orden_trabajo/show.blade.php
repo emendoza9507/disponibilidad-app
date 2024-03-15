@@ -10,37 +10,49 @@
             <div id="reporte-ot" class="p-6 lg:p-8 bg-white border-b border-gray-200 relative">
                 @if($ot)
                     <div class="hidden print:block mb-3 border-b-2">
-                        <h3 class="text-2xl font-bold uppercase">Orden Trabajo</h3>
+                        <h3 class="text-2xl font-bold uppercase">Orden de Trabajo</h3>
                     </div>
 
-                    <div class="card lg:w-4/12 flex flex-col">
-                        <div class="flex text-xl justify-between">
-                            <h3 class="font-bold">OT:</h3>
-                            <span>{{$ot->CODIGOOT}}</span>
+                    <div class="grid lg:gap-12 lg:grid-cols-2">
+                        <div class="flex flex-col">
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">OT:</h3>
+                                <span>{{$ot->CODIGOOT}}</span>
+                            </div>
+
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">MATRICULA:</h3>
+                                <a href="{{route('autos.show', $ot->CODIGOM)}}" class="underline">{{$ot->MATRICULA}}</a>
+                            </div>
+
+                            <div class="flex text-xl  justify-between">
+                                <h3 class="font-bold">ENTRADA:</h3>
+                                <span>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('(h:m) d/m/Y')}}</span>
+                            </div>
+
+                            <div class="flex text-xl  justify-between">
+                                <h3 class="font-bold">SALIDA:</h3>
+                                <span>{{$ot->FECHASALIDA != null ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('(h:m) d/m/Y') : ''}}</span>
+                            </div>
+
+                            <div class="flex text-xl  justify-between">
+                                <h3 class="font-bold">ESTADO:</h3>
+                                <span class="uppercase @if($ot->FECHACIERRE == null) text-green-500 @else text-red-500 @endif">{{$ot->FECHACIERRE == null ? 'Abierta' : 'Cerrada'}}</span>
+                            </div>
                         </div>
 
-                        <div class="flex text-xl justify-between">
-                            <h3 class="font-bold">MATRICULA:</h3>
-                            <a href="{{route('autos.show', $ot->CODIGOM)}}" class="underline">{{$ot->MATRICULA}}</a>
-                        </div>
+                        <div class="card flex flex-col">
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">KM/E:</h3>
+                                <span>{{number_format($ot->KMENTRADA,2)}}</span>
+                            </div>
 
-                        <div class="flex text-xl  justify-between">
-                            <h3 class="font-bold">ENTRADA:</h3>
-                            <span>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('(h:m) d/m/Y')}}</span>
-                        </div>
-
-                        <div class="flex text-xl  justify-between">
-                            <h3 class="font-bold">SALIDA:</h3>
-                            <span>{{$ot->FECHASALIDA != null ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('(h:m) d/m/Y') : ''}}</span>
-                        </div>
-
-                        <div class="flex text-xl  justify-between">
-                            <h3 class="font-bold">ESTADO:</h3>
-                            <span class="uppercase @if($ot->FECHACIERRE == null) text-green-500 @else text-red-500 @endif">{{$ot->FECHACIERRE == null ? 'Abierta' : 'Cerrada'}}</span>
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">KM/S:</h3>
+                                <span>{{number_format($ot->kmsalida,2)}}</span>
+                            </div>
                         </div>
                     </div>
-
-                    <br>
 
                     <h3 class="text-xl font-bold uppercase">Diagnostico</h3>
                     <div>
@@ -121,8 +133,8 @@
                         </tr>
                     </table>
 
-                    <div class="mt-5 absolute top-0 right-6">
-                        <x-button id="btn-print" class="print:hidden bg-yellow-300 text-black hover:text-white rounded-none">
+                    <div class="mt-5 text-end">
+                        <x-button id="btn-print" class="print:hidden bg-yellow-600 text-black hover:text-white rounded-none">
                             @include('icons.printer')
                             IMPRIMIR
                         </x-button>

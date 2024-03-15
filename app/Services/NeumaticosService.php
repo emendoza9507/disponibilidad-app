@@ -4,12 +4,19 @@ namespace App\Services;
 
 use App\Helpers\ResetDB;
 use App\Livewire\OrdenTrabajo\Materiales;
+use App\Models\Bateria;
 use App\Models\Mistral\OrdenTrabajo;
+use App\Models\Neumatico;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
 class NeumaticosService
 {
+
+    public function __construct(protected OrdenTrabajoService $ordenTrabajoService)
+    {}
+
     public function resumenNeumaticosPorMesAnno($start_date, $end_date)
     {
         $connection = (object) session('connection', Config::get('database.connections.taller'));
@@ -69,5 +76,45 @@ class NeumaticosService
         }
 
         return $result;
+    }
+
+    public function getByCodigoOt(string $codigoot)
+    {
+        return Neumatico::where('CODIGOOT', $codigoot)->get();
+    }
+
+    public function getCantidadNeumaticosCargados(OrdenTrabajo $ot)
+    {
+        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A11');
+        $cantidad = 0;
+
+        foreach ($materiales as $material) {
+            $cantidad += $material->CANTIDAD;
+        }
+
+        return $cantidad;
+    }
+
+    public function generarConsecutivosDeNeumaticos(OrdenTrabajo $ot)
+    {
+        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A11');
+        $neumaticos = count($this->getByCodigoOt($ot));
+        $neumaticosCargados = $this->getCantidadNeumaticosCargados($ot);
+
+        $consecutivos = [];
+
+
+        for ($i = $neumaticos; $i < $neumaticosCargados; $i++) {
+            $neumatico = new Neumatico();
+            $neumatico->CODIGOOT = $ot->CODIGOOT;
+            $neumatico->TALLER = $ot->Prisma;
+            $neumatico->user_id = Auth::user()->id;
+
+            $neumatico->save();
+            $consecutivos[] = $neumatico;
+        }
+
+
+        return $consecutivos;
     }
 }

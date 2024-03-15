@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('neumaticos', function (Blueprint $table) {
+        Schema::create('baterias', function (Blueprint $table) {
             $table->id();
             $table->string('CODIGOOT');
             $table->string('TALLER');
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('neumatico_anterior')->nullable()->references('id')->on('neumaticos');
+            $table->foreignId('bateria_anterior')->nullable()->references('id')->on('baterias');
             $table->string('OBSERVACIONES')->nullable();
             $table->timestamps();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('neumaticos');
+        Schema::dropIfExists('baterias');
     }
 };

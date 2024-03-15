@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AutoController;
+use App\Http\Controllers\Consecutivos\CBateriaController;
+use App\Http\Controllers\Consecutivos\CNeumaticoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\NeumaticoController;
 use App\Http\Controllers\OrdenTrabajoController;
@@ -50,10 +52,14 @@ Route::middleware([
     Route::resource('neumatico', NeumaticoController:: class)->only('index');
     Route::resource('reportes', ReportesController::class)->only('index');
 
-    Route::name('reporte.')->group(function () {
-        Route::resource('reporte/bateria',RBateriaController::class)->only('index');
-        Route::resource('reporte/neumatico',RNeumaticoController::class)->only('index');
-    });
+    Route::name('reporte')->resource('reporte/bateria',RBateriaController::class)->only('index');
+    Route::name('reporte')->resource('reporte/neumatico',RNeumaticoController::class)->only('index');
+
+    Route::name('reporte')->resource('reporte/bateria',RBateriaController::class)->only('index');
+    Route::name('reporte')->resource('reporte/neumatico',RNeumaticoController::class)->only('index');
 
     Route::resource('orden', OrdenTrabajoController::class)->only(['index', 'show']);
+
+    Route::name('consecutivo')->resource('consecutivo/bateria', CBateriaController::class)->only(['index', 'store']);
+    Route::name('consecutivo')->resource('consecutivo/neumatico', CNeumaticoController::class)->only(['index', 'store']);
 });

@@ -24,7 +24,9 @@ class OrdenTrabajoController extends Controller
 
         try {
             $ordenes = $ordenTrabajoService->getAll($start_date, $end_date);
-        } catch (\Exception $exception) {}
+        } catch (\Exception $exception) {
+            self::warning($exception);
+        }
 
         return view('orden_trabajo.index',compact(
             'ordenes',
