@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('baterias', function (Blueprint $table) {
             $table->id();
             $table->string('CODIGOOT');
+            $table->string('CODIGOM');
             $table->string('TALLER');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('bateria_anterior')->nullable()->references('id')->on('baterias');

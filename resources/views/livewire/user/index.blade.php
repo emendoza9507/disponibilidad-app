@@ -41,6 +41,7 @@
                                             {{$user->email}}
                                         </td>
                                         <td id="{{$user->id}}" class="w-32 text-sm flex text-gray-900 font-light px-0 py-4 whitespace-nowrap justify-end">
+                                            <livewire:user.connections :user="$user" :key="'connection-'.$user->id.uniqid()"/>
                                             <livewire:user.update :user="$user" :key="'update-'.$user->id.uniqid()"/>
                                             <livewire:user.delete :user="$user" :key="'delete-'.$user->id.uniqid()"/>
                                         </td>

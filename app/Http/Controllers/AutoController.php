@@ -30,7 +30,7 @@ class AutoController extends Controller
 
         if(isset($matricula)) {
             try {
-                $autos = $autoService->find($matricula);
+                $autos = $autoService->getBy($matricula);
             } catch (\Exception $exception) {
                 return redirect(route('autos.index'))->with('error', $exception->getMessage());
             }

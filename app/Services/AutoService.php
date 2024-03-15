@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Config;
 
 class AutoService
 {
-    public function find($matricula)
+    public function getBy($matricula)
     {
         $connection = (object) session('connection', Config::get('database.connections.taller'));
         ResetDB::setDBConfig('taller', (array) $connection);

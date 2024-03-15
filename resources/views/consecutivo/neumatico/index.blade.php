@@ -16,7 +16,7 @@
                       action="{{route('consecutivo.neumatico.index')}}">
                     <div class="flex gap-2">
                         <div class="relative">
-                            <x-input id="input-search" class="rounded-none pr-8" placeholder="Buscar"/>
+                            <x-input id="input-search" name="matricula" value="{{$matricula}}" class="rounded-none pr-8" placeholder="Buscar"/>
                             <span class="absolute right-2 top-2.5 ">@include('icons.search')</span>
                         </div>
 
@@ -103,6 +103,38 @@
                         </tfoot>
                     </table>
                 </div>
+                @if($matricula)
+                <div style="max-height: 400px" class="mt-3 overflow-y-auto">
+                    <h3 class="text-xl uppercase">Neumaticos Anteriores</h3>
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-start">OT</th>
+                                <th class="text-start">MATRICULA</th>
+                                <th class="text-start">TALLER</th>
+                                <th class="text-start">CONSECUTIVO</th>
+                                <th class="text-start">FECHA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($consecutivos_anteriores as $consecutivo)
+                            @php($fecha = \Carbon\Carbon::create($consecutivo->created_at))
+                            <tr class="text-start">
+                                <td class="text-start">{{$consecutivo->CODIGOOT}}</td>
+                                <td>{{$consecutivo->CODIGOM}}</td>
+                                <td>{{$consecutivo->TALLER}}</td>
+                                <td>
+                                    {{$fecha->format('y')}}{{$consecutivo->id}}
+                                </td>
+                                <td>
+                                    {{$fecha->format('d/m/Y')}}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @endif
             </div>
         </div>
     </x-container>

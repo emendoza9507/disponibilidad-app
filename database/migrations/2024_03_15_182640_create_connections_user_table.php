@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('neumaticos', function (Blueprint $table) {
+        Schema::create('connection_role_users', function (Blueprint $table) {
             $table->id();
-            $table->string('CODIGOOT');
-            $table->string('CODIGOM');
-            $table->string('TALLER');
+            $table->foreignId('connection_id')->references('id')->on('connections');
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('neumatico_anterior')->nullable()->references('id')->on('neumaticos');
-            $table->string('OBSERVACIONES')->nullable();
-            $table->timestamps();
+            $table->foreignId('rol_id')->references('id')->on('roles');
+
+            $table->unique(['connection_id', 'user_id', 'rol_id']);
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('neumaticos');
+        Schema::dropIfExists('connections_user');
     }
 };

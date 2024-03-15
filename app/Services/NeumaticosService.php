@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Helpers\ResetDB;
-use App\Livewire\OrdenTrabajo\Materiales;
-use App\Models\Bateria;
 use App\Models\Mistral\OrdenTrabajo;
 use App\Models\Neumatico;
 use Carbon\Carbon;
@@ -83,6 +81,13 @@ class NeumaticosService
         return Neumatico::where('CODIGOOT', $codigoot)->get();
     }
 
+    public function getByCodigoCodigoMaestro(string $codigom)
+    {
+        return Neumatico::where('CODIGOM', $codigom)
+            ->orderBy('id', 'desc')
+            ->get();
+    }
+
     public function getCantidadNeumaticosCargados(OrdenTrabajo $ot)
     {
         $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A11');
@@ -107,6 +112,7 @@ class NeumaticosService
         for ($i = $neumaticos; $i < $neumaticosCargados; $i++) {
             $neumatico = new Neumatico();
             $neumatico->CODIGOOT = $ot->CODIGOOT;
+            $neumatico->CODIGOM = $ot->CODIGOM;
             $neumatico->TALLER = $ot->Prisma;
             $neumatico->user_id = Auth::user()->id;
 
