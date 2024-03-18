@@ -166,17 +166,38 @@
             cerradas    += taller.cerradas;
             total       += taller.total;
 
+            let conecion_estado = taller.conectado ? taller.conectado : false
+
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
-                        ${taller.taller}
-                    </a>
-                </td>
-                <td>${taller.abiertas}</td>
-                <td>${taller.cerradas}</td>
-                <td>${taller.total}</td>
-            `
+
+            if(conecion_estado) {
+                tr.innerHTML = `
+                    <td>
+                        <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
+                            ${taller.taller}
+                        </a>
+                    </td>
+                    <td>${taller.abiertas}</td>
+                    <td>${taller.cerradas}</td>
+                    <td>${taller.total}</td>
+                `
+            } else {
+                tr.innerHTML = `
+                    <td>
+                        <a class="text-red-300 text-bold" href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
+                            ${taller.taller}
+                        </a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span class="py-0 px-2 bg-red-400 text-white font-bold">desconectado</span>
+                    </td>
+                `
+            }
+
+
+
             $ordenesPorTaller.append(tr)
         })
 

@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Helpers\ResetDB;
 use App\Models\Connection;
 use App\Models\Mistral\Parametro;
+use Illuminate\Http\Client\Request;
+use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 
 class ConnectionService
 {
-    public function setConnection($connection_id)
+    public function setConnection($connection_id, \Closure $callback = null)
     {
         $connection = Connection::find($connection_id);
 
@@ -23,7 +26,15 @@ class ConnectionService
             ]]);
         }
 
-        ResetDB::setDBConfig('taller', (array) session('connection'));
+        $connect = ResetDB::setDBConfig('taller', (array) session('connection'));
+
+        if(!$connect) {
+            if($callback) {
+                return $callback();
+            } else {
+                return null;
+            }
+        }
 
         return $connection;
     }

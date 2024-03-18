@@ -25,8 +25,8 @@ function reportPrint($btnPrint, $areaPrint, callback) {
         $printer.addEventListener('focusout', () => $printer.close())
         $printer.addEventListener('afterprint', () => $printer.close())
 
-        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://${hostame}/app.css?${Date.now()}">
-            <script src="http://${hostame}/app.js"></script>
+        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://${hostame}/build/assets/app.css?${Date.now()}">
+            <script src="http://${hostame}/build/assets/app.js"></script>
         `
 
         // Array.from($printer.document.body.getElementsByClassName('print:hidden')).forEach(node => node.classList.add('hidden'))

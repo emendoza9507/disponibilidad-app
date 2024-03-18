@@ -72,11 +72,15 @@ Route::middleware([
         Route::name('consecutivo')->resource('consecutivo/neumatico', CNeumaticoController::class)->only(['index', 'store']);
 
         Route::name('consecutivo.')->group(function (){
-           Route::controller(CNeumaticoController::class)->prefix('consecutivo/neumatico')->group(function () {
-               Route::name('neumatico.all')->get('/all', 'all');
-               Route::name('neumatico.show')->get('/{neumatico}', 'show');
+            //Rutas Consecutivos Neumaticos
+            Route::controller(CNeumaticoController::class)->prefix('consecutivo/neumatico')->group(function () {
+                Route::name('neumatico.all')->get('/all', 'all');
+                Route::name('neumatico.show')->get('/{neumatico}', 'show');
+                Route::name('neumatico.show_maestro')->get('/maestro/{maestro}', 'showMaestro');
+                Route::name('neumatico.json_last_ot_with_neumatico')->get('/maestro/{maestro}/last', 'jsonUltimaOTConNeumaticos');
            });
 
+            //Rutas Consecutivos Baterias
             Route::controller(CBateriaController::class)->prefix('consecutivo/bateria')->group(function () {
                 Route::name('bateria.all')->get('/all', 'all');
                 Route::name('bateria.show')->get('/{bateria}', 'show');

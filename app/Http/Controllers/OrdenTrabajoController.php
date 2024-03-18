@@ -22,21 +22,17 @@ class OrdenTrabajoController extends Controller
         $matricula = $request->query->get('matricula');
         $maestro = $request->query->get('maestro');
 
-        $ordenes = [];
+        if(!$connection) return redirect(route('home'));
 
-        try {
-            if($maestro) {
-                self::info('Mostrando informacion del Maestro, para actualizar click en GENERAR');
-                $ordenes = $ordenTrabajoService->getByMaestro($maestro);
-            } elseif ($matricula) {
-                $ordenes = $ordenTrabajoService->getByMatricula($matricula, $start_date, $end_date);
-            } else {
-                $ordenes = $ordenTrabajoService->getAll($start_date, $end_date)
-                ->get();
-            }
 
-        } catch (\Exception $exception) {
-            self::warning($exception);
+        if($maestro) {
+            self::info('Mostrando informacion del Maestro, para actualizar click en GENERAR');
+            $ordenes = $ordenTrabajoService->getByMaestro($maestro);
+        } elseif ($matricula) {
+            $ordenes = $ordenTrabajoService->getByMatricula($matricula, $start_date, $end_date);
+        } else {
+            $ordenes = $ordenTrabajoService->getAll($start_date, $end_date)
+            ->get();
         }
 
         return view('orden_trabajo.index',compact(
@@ -48,10 +44,8 @@ class OrdenTrabajoController extends Controller
     public function Show(Request $request, string $codigoot, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
     {
         $connection_id = $request->query->get('connection_id', 1);
-
-        if($connection_id) {
-            $connection = $connectionService->setConnection($connection_id);
-        }
+        $connection = $connectionService->setConnection($connection_id);
+        if(!$connection) return redirect(route('home'));
 
         $ot = $ordenTrabajoService->get($codigoot);
 

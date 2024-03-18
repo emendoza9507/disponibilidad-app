@@ -24,6 +24,16 @@ class ResetDB
 
         DB::purge($connection_name);
 
+        try {
+            DB::connection($connection_name)->getPDO();
+            DB::connection($connection_name)->getDatabaseName();
+        } catch (\Exception $e) {
+            // No está conectado
+            return null;
+        }
+
+
+
         return DB::connection($connection_name);
     }
 }

@@ -21,9 +21,11 @@ class AutoController extends Controller
     public function index(Request $request, ConnectionService $connectionService, AutoService $autoService)
     {
         $connection_id = $request->query->get('connection_id',1);
-        $connectionService->setConnection($connection_id);
+        $connection = $connectionService->setConnection($connection_id);;
 
         $matricula = $request->query->get('matricula');
+
+        if(!$connection) return redirect(route('home'));
 
         $autos = [];
 
@@ -62,7 +64,7 @@ class AutoController extends Controller
     public function show(Request $request, string $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
     {
         $connection_id = $request->query->get('connection_id', 1);
-        $connection = $connectionService->setConnection($connection_id);
+        $connection = $connectionService->setConnection($connection_id, function () { back(); });;
 
         $ordenes = [];
         try {
@@ -83,7 +85,16 @@ class AutoController extends Controller
         $connection_id = $request->query->get('connection_id');
         $connection = $connectionService->setConnection($connection_id);
 
-        $ordenes = [];
+        if(!$connection) {
+            return new JsonResponse([
+                'taller' => $connectionService->getCurrentConnection()->codigo_taller,
+                'total' => 0,
+                'abiertas' => 0,
+                'cerradas' => 0,
+                'conectado' => false
+            ]);
+        }
+
         try {
             $auto = Maestro::find($auto);
 
@@ -98,7 +109,8 @@ class AutoController extends Controller
             'taller' => $connection->codigo_taller,
             'total' => $ordenes_total,
             'abiertas' => $ordenes_abiertas,
-            'cerradas' => $ordenes_cerradas
+            'cerradas' => $ordenes_cerradas,
+            'conectado' => true
         ]);
     }
 

@@ -29,8 +29,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-        $this->connections = Connection::paginate(30);
-
         Blade::if('role', function (string $connection = null, string $role = null) {
             if($connection != null && $role != null) {
                 $user = auth()->user();
@@ -50,6 +48,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         view()->composer('*', function ($view) {
+            if(!$this->connections) {
+                $this->connections = Connection::paginate(30);
+            }
+
+
             return $view->with('connections', $this->connections);
         });
     }

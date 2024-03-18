@@ -71,7 +71,7 @@
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
+                                <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
                                 <td>
@@ -112,7 +112,7 @@
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
+                                <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
                                 <td>
@@ -148,7 +148,7 @@
                 @if($matricula)
 
                 <div class="mt-3  overflow-hidden">
-                    <h3 class="text-xl clear-both inline-block top-1 relative uppercase">Neumaticos Anteriores</h3>
+                    <h3 class="text-xl clear-both inline-block top-1 relative uppercase">Consecutivos Anteriores</h3>
 
                 </div>
                 <div style="max-height: 400px" class="overflow-y-auto">

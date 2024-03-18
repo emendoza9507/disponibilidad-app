@@ -13,8 +13,10 @@ class RProduccionProceso extends Controller
     public function index(Request $request, ConnectionService $connectionService, OrdenTrabajoService $ordenTrabajoService)
     {
         $connection_id = $request->query->get('connection_id', 1);
-        $connectionService->setConnection($connection_id );
-        $connection = $connectionService->getCurrentConnection();
+        $connection = $connectionService->setConnection($connection_id );
+
+        if(!$connection) return redirect(route('home'));
+
         $ordenes = [];
 
         $query = $ordenTrabajoService->getQueryProduccionProceso();

@@ -20,6 +20,8 @@ class ROrdenesEstadoController extends Controller
         $connection_id = $request->query->get('connection_id', 1);
         $connection = $connectionService->setConnection($connection_id );
 
+        if(!$connection) return redirect(route('home'));
+
         $estado = strtoupper($request->query->get('estado', 'abiertas'));
 
         $query = $ordenTrabajoService->getQueryByEstado($estado, $start_date, $end_date);

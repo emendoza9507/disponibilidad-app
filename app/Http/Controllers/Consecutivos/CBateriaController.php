@@ -30,8 +30,10 @@ class CBateriaController extends Controller
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
         $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subDay(1);
         $connection_id = $request->query->get('connection_id', 1);
-        $connection = $connectionService->setConnection($connection_id);
+        $connection = $connectionService->setConnection($connection_id, function () { back(); });;
         $matricula = $request->query->get('matricula');
+
+        if(!$connection) return redirect(route('home'));
 
         $ordenes = [];
         $consecutivos_anteriores = [];
@@ -81,7 +83,7 @@ class CBateriaController extends Controller
     {
         $connection_id = $request->query->get('connection_id');
         $codigoot = $request->request->get('codigoot');
-        $connectionService->setConnection($connection_id);
+        $connectionService->setConnection($connection_id, function () { back(); });;
 
         $orden = $ordenTrabajoService->get($codigoot);
 

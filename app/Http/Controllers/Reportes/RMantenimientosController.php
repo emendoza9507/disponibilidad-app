@@ -27,8 +27,9 @@ class RMantenimientosController extends Controller
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
         $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subMonth(1);
         $connection_id = $request->query->get('connection_id', 1);
-        $connection = $connectionService->setConnection($connection_id);
+        $connection = $connectionService->setConnection($connection_id, function () { back(); });;
 
+        if(!$connection) return redirect(route('home'));
 
 
         $ordenes = $mantenimientoService->getMantenimientosByDate($start_date, $end_date)

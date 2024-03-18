@@ -17,4 +17,9 @@ class AutoService
             ->orWhere('MATRICULAANT', 'like', '%'.$matricula.'%')
             ->get();
     }
+
+    public function getByMaestro(string $maestro)
+    {
+        return Maestro::where('CODIGOM', $maestro)->first();
+    }
 }

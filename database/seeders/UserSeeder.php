@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
 
         User::create([
             'name' => 'Richard Gerrero',
-            'email' => 'tecnica.primelles@rch.transtur.cu',
+            'email' => 'tecnica.cienaga@rch.transtur.cu',
             'password' => bcrypt('123456')
-        ])->assignRole('admin');
+        ])->assignRole('tecnico');
     }
 }
