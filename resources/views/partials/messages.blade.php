@@ -3,8 +3,9 @@
 $bg_colors = [
     'info' => 'bg-blue-400',
     'success' => 'bg-green-500',
-    'alert' => 'bg-red-400',
-    'warning' => 'bg-yellow-30'
+    'alert' => 'bg-orange-400',
+    'warning' => 'bg-yellow-300',
+    'danger' => 'bg-red-400'
 ]
 
 @endphp

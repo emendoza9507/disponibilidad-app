@@ -15,8 +15,7 @@ class OrdenTrabajoService
 
         return OrdenTrabajo::whereBetween('FECHAENTRADA', [$start_date, $end_date])
             ->orderBy('FECHAENTRADA', 'DESC')
-            ->orderBy('FECHASALIDA', 'DESC')
-            ->get();
+            ->orderBy('FECHASALIDA', 'DESC');
     }
 
     public function get(string $codigoot)
@@ -24,15 +23,76 @@ class OrdenTrabajoService
         $connection = (object) session('connection', Config::get('database.connections.taller'));
         ResetDB::setDBConfig('taller', (array) $connection);
 
-        return OrdenTrabajo::where('CODIGOOT', $codigoot)->first();
+        return OrdenTrabajo::withManoObras()->where('CODIGOOT', $codigoot)->first();
     }
 
-    public function getByMaestro(string $codigom)
+    public function getQueryByEstado(&$estado, $start_date, $end_date)
+    {
+        $estado = strtoupper($estado);
+
+        $query = OrdenTrabajo::orderBy('CODIGOOT', 'desc');
+
+        switch ($estado) {
+            case 'CERRADAS': {
+                $query->whereNotNull('FECHACIERRE')
+                    ->where('FECHAENTRADA', '>=', $start_date)
+                    ->where('FECHACIERRE', '<=', $end_date->copy()->addDay(1));
+                break;
+            }
+            default: {
+                $query->whereNull('FECHACIERRE')
+                    ->whereBetween('FECHAENTRADA', [$start_date, $end_date->copy()->addDay(1)]);
+
+                $estado = 'ABIERTAS';
+            }
+        }
+
+        return $query;
+    }
+
+    public function getQueryProduccionProceso()
+    {
+        return OrdenTrabajo::whereNull('FECHACIERRE')
+            ->orderBy('CODIGOOT', 'desc')
+            ->has('materials', '>', 0);
+    }
+
+    public function getByMaestro(string $codigom, $start_date = null, $end_date = null)
     {
         $connection = (object) session('connection', Config::get('database.connections.taller'));
         ResetDB::setDBConfig('taller', (array) $connection);
 
-        return OrdenTrabajo::where('CODIGOM', $codigom)->orderBy('FECHAENTRADA', 'DESC')->get();
+        $query = OrdenTrabajo::where('CODIGOM', $codigom)->orderBy('FECHAENTRADA', 'DESC');
+
+        if($start_date) {
+            $query = $query->where('FECHAENTRADA', '>=', $start_date);
+        }
+
+        if($end_date) {
+            $query = $query->where('FECHACIERRE', '<=', $end_date);
+        }
+
+        return $query->get();
+    }
+
+    public function getByMaestroAbiertas(string $codigom)
+    {
+        $connection = (object) session('connection', Config::get('database.connections.taller'));
+        ResetDB::setDBConfig('taller', (array) $connection);
+
+        return OrdenTrabajo::where('CODIGOM', $codigom)
+            ->whereNull('FECHACIERRE')
+            ->orderBy('FECHAENTRADA', 'DESC')->get();
+    }
+
+    public function getByMaestroCerradas(string $codigom)
+    {
+        $connection = (object) session('connection', Config::get('database.connections.taller'));
+        ResetDB::setDBConfig('taller', (array) $connection);
+
+        return OrdenTrabajo::where('CODIGOM', $codigom)
+            ->whereNotNull('FECHACIERRE')
+            ->orderBy('FECHAENTRADA', 'DESC')->get();
     }
 
     public function getByMatricula(string $matricula, $fecha_entrada = null, $fecha_cierre = null, string $operation = '<')

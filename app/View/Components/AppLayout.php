@@ -49,7 +49,29 @@ class AppLayout extends Component
                     (object) [
                         'label' => 'Ordenes de Trabajo',
                         'icon' => 'documents',
-                        'href' => 'orden.index'
+                        'href' => 'orden.index',
+                    ],
+                    (object) [
+                        'label' => 'Ordenes Abiertas',
+                        'icon' => 'lock-open',
+                        'href' => 'reporte.ordenes.index',
+                        'params' => [null,'estado' => 'abiertas']
+                    ],
+                    (object) [
+                        'label' => 'Ordenes Cerradas',
+                        'icon' => 'lock-closed',
+                        'href' => 'reporte.ordenes.index',
+                        'params' => [null,'estado' => 'cerradas']
+                    ],
+                    (object) [
+                        'label' => 'Prod. en Proceso',
+                        'icon' => 'prod-proceso',
+                        'href' => 'reporte.proceso.index',
+                    ],
+                    (object) [
+                        'label' => 'Mantenimientos',
+                        'icon' => 'settings',
+                        'href' => 'reporte.mantenimiento.index',
                     ],
                     (object) [
                         'label' => 'Baterias',
@@ -66,6 +88,7 @@ class AppLayout extends Component
             (object) [
                 'label' => 'Configuracion',
                 'icon' => 'report',
+                'can' => 'admin.app',
                 'dropdown' => [
                     (object) [
                         'label' => 'Conecciones',

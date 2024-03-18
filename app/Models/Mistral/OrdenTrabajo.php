@@ -20,6 +20,13 @@ class OrdenTrabajo extends Model
         return $this->hasMany(Material::class, 'CODIGOOT', 'CODIGOOT');
     }
 
+    public function scopeWithManoObras($query) {
+        $query->with('manoObras', function ($query) {
+            $query->with('operario');
+        });
+    }
+
+
     public function manoObras()
     {
         return $this->hasMany(ManoObra::class, 'CODIGOOT', 'CODIGOOT');

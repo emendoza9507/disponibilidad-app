@@ -10,6 +10,7 @@ use App\Models\Mistral\Maestro;
 use App\Services\AutoService;
 use App\Services\ConnectionService;
 use App\Services\OrdenTrabajoService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AutoController extends Controller
@@ -19,9 +20,7 @@ class AutoController extends Controller
      */
     public function index(Request $request, ConnectionService $connectionService, AutoService $autoService)
     {
-        //
-        $connections = Connection::all();
-        $connection_id = $request->query->get('connection_id') ?: $connections[0]->id;
+        $connection_id = $request->query->get('connection_id',1);
         $connectionService->setConnection($connection_id);
 
         $matricula = $request->query->get('matricula');
@@ -37,8 +36,7 @@ class AutoController extends Controller
         }
 
         return view('auto.index', compact(
-            'connections', 'connection_id',
-            'autos', 'matricula'
+            'connection_id','autos', 'matricula'
         ));
     }
 
@@ -63,9 +61,7 @@ class AutoController extends Controller
      */
     public function show(Request $request, string $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
     {
-        $session_connection = session('connection');
-        $connections = Connection::all();
-        $connection_id = $request->query->get('connection_id') ?: (isset($session_connection['connection_id']) ? $session_connection['connection_id'] :  $connections[0]->id);
+        $connection_id = $request->query->get('connection_id', 1);
         $connection = $connectionService->setConnection($connection_id);
 
         $ordenes = [];
@@ -78,8 +74,32 @@ class AutoController extends Controller
         }
 
         return view('auto.show', compact(
-            'auto', 'ordenes', 'connections', 'connection_id', 'connection'
+            'auto', 'ordenes',  'connection_id', 'connection'
         ));
+    }
+
+    public function jsonShow(Request $request, string $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
+    {
+        $connection_id = $request->query->get('connection_id');
+        $connection = $connectionService->setConnection($connection_id);
+
+        $ordenes = [];
+        try {
+            $auto = Maestro::find($auto);
+
+            $ordenes_total = $ordenTrabajoService->getByMaestro($auto->CODIGOM)->count();
+            $ordenes_abiertas =  $ordenTrabajoService->getByMaestroAbiertas($auto->CODIGOM)->count();
+            $ordenes_cerradas =  $ordenTrabajoService->getByMaestroCerradas($auto->CODIGOM)->count();
+        } catch (\Exception $exception) {
+            return redirect(route('autos.index'))->with('error', $exception->getMessage());
+        }
+
+        return new JsonResponse([
+            'taller' => $connection->codigo_taller,
+            'total' => $ordenes_total,
+            'abiertas' => $ordenes_abiertas,
+            'cerradas' => $ordenes_cerradas
+        ]);
     }
 
     /**

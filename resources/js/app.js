@@ -2,11 +2,11 @@ import './bootstrap';
 
 
 
-function reportPrint($btnPrint, $areaPrint) {
+function reportPrint($btnPrint, $areaPrint, callback) {
     const hostame = location.hostname
 
     $btnPrint.addEventListener('click', () => {
-        const $printer = window.open('', this, "width=800,height=600,menubar=NO")
+        const $printer = window.open('', 'ReporteOrden', "width=800,height=600,menubar=NO")
 
         $printer.document.body.innerHTML = `
             <div class="min-h-screen bg-gray-100">
@@ -25,12 +25,13 @@ function reportPrint($btnPrint, $areaPrint) {
         $printer.addEventListener('focusout', () => $printer.close())
         $printer.addEventListener('afterprint', () => $printer.close())
 
-        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://${hostame}/app.css">
+        $printer.document.head.innerHTML = `<link rel="stylesheet" href="http://${hostame}/app.css?${Date.now()}">
             <script src="http://${hostame}/app.js"></script>
         `
 
         // Array.from($printer.document.body.getElementsByClassName('print:hidden')).forEach(node => node.classList.add('hidden'))
         Array.from($printer.document.body.getElementsByClassName('print:block')).forEach(node => node.classList.remove('hidden'))
+        Array.from($printer.document.getElementsByClassName('overflow-y-auto')).forEach(node => node.style = '')
 
         $printer.document.querySelector('#btn-print').addEventListener('click', function () {
             $printer.print();
@@ -38,6 +39,7 @@ function reportPrint($btnPrint, $areaPrint) {
 
         $printer.document.body.querySelectorAll('a').forEach(a => a.href = '#')
 
+        callback($printer.document)
         // $printer.print()
     })
 }

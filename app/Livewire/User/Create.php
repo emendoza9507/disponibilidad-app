@@ -30,7 +30,11 @@ class Create extends Component
             'password' => 'required|confirmed'
         ]);
 
-        $user = User::create($validated);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password'])
+        ]);
 
         $this->dispatch('user.created');
         $this->open = false;

@@ -15,10 +15,9 @@ class RBateriaController extends Controller
     //
     public function index(Request $request, NeumaticosService $neumaticosService)
     {
-        $connections = Connection::all();
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
         $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subMonth(1);
-        $connection_id = $request->query->get('connection_id') ?: $connections[0]->id;
+        $connection_id = $request->query->get('connection_id', 1);
 
         $connection = Connection::find($connection_id);
 
@@ -36,7 +35,7 @@ class RBateriaController extends Controller
 
         return view('reportes.bateria.index',compact(
             'resumenBaterias',
-            'start_date','end_date', 'connections',
+            'start_date','end_date',
             'connection_id', 'connection'
         ));
     }

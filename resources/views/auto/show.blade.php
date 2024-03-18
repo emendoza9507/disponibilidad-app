@@ -6,6 +6,8 @@
     </x-slot>
 
     <x-container>
+        @include('partials.messages')
+
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
@@ -85,10 +87,10 @@
                             <label class="pl-2 flex">TALLER
                                 <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id">
                                     @foreach($connections as $connection)
-                                            <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
-                                            {{$connection->name}}
+                                        <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
+                                        {{$connection->name}}
                                         </option>
-                                        @endforeach
+                                    @endforeach
                                 </select>
                             </label>
                     </form>
@@ -97,9 +99,38 @@
                 </div>
                 @else
                     <div class="mt-5">
-                        <h3 class="uppercase text-red-400">Sin Ordenes de Trabajo en el taller: {{$connection->name}}</h3>
+                        <form id="form-select-connection" class="flex mb-2 text-xl items-center" action="{{route('autos.show', $auto->CODIGOM)}}">
+                            <h3 class="uppercase text-red-400">Sin Ordenes de Trabajo en el taller:</h3>
+                            <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id">
+                                @foreach($connections as $connection)
+                                    <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
+                                        {{$connection->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </form>
                     </div>
                 @endisset
+
+                <div class="mt-5">
+                    <h3 class="uppercase inline-block border-2 border-b-0 bg-gray-300 border-gray-300">Ordenes en Taller</h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2">
+                        <table class="border-2 border-gray-300">
+                            <thead>
+                            <tr>
+                                <th class="w-1 uppercase">Taller</th>
+                                <th class="uppercase">Abiertas</th>
+                                <th class="uppercase">Cerradas</th>
+                                <th class="uppercase">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody id="ordenes-por-taller" class="text-center">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </x-container>
@@ -108,7 +139,56 @@
     const $selectConnection = document.querySelector('#select-connection');
     const $formSelectConnection = document.querySelector('#form-select-connection');
 
+    const $ordenesPorTaller = document.querySelector('#ordenes-por-taller')
+
     $selectConnection.addEventListener('change', () => {
         $formSelectConnection.submit();
     })
+
+    const connections = @json($connections);
+
+    function loadOrdenerPorTaller($connection, $parent) {
+        return fetch('{{route('auto.show.ordenes', $auto->CODIGOM)}}' + `?connection_id=${$connection.id}`)
+            .then(res => res.json())
+            .then(ordenes => {
+                return ordenes
+            })
+    }
+
+    const promises = Array.from(connections.data).map(connection => loadOrdenerPorTaller(connection, $ordenesPorTaller))
+
+    Promise.all(promises).then((ordenes) => {
+        let abiertas = 0, cerradas = 0, total = 0
+
+        $ordenesPorTaller.innerHTML = '';
+        ordenes.forEach((taller, index) => {
+            abiertas    += taller.abiertas;
+            cerradas    += taller.cerradas;
+            total       += taller.total;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
+                        ${taller.taller}
+                    </a>
+                </td>
+                <td>${taller.abiertas}</td>
+                <td>${taller.cerradas}</td>
+                <td>${taller.total}</td>
+            `
+            $ordenesPorTaller.append(tr)
+        })
+
+        const tr = document.createElement('tr');
+        tr.classList.add('bg-gray-300')
+        tr.innerHTML = `
+                <th>TOTAL</th>
+                <td>${abiertas}</td>
+                <td>${cerradas}</td>
+                <td>${total}</td>
+            `
+        $ordenesPorTaller.append(tr)
+    })
+
 </script>

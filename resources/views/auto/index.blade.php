@@ -83,7 +83,7 @@
 
     $inputSearh.addEventListener('keyup', () => {
         Array.from($dataNeumaticos.children).forEach(($tr => {
-            if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().toLowerCase())) {
+            if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().trim().toLowerCase())) {
                 $tr.classList.remove('hidden')
             } else {
                 $tr.classList.add('hidden')

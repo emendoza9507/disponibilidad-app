@@ -21,6 +21,11 @@
                     <x-input id="name" wire:model.live="name" class="block mt-1 w-full" type="text" />
                 </div>
 
+                <div>
+                    <x-label for="name" value="{{ __('Centro de Costo') }}" />
+                    <x-input id="name" wire:model.live="codigo_taller" class="block mt-1 w-full" type="text" />
+                </div>
+
                 <div class="mt-4">
                     <x-label for="database"  value="{{ __('Nombre de la Base de Datos') }}" />
                     <x-input id="database" wire:model.live="database" class="block mt-1 w-full" type="text" name="database"

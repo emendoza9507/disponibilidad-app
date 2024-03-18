@@ -7,7 +7,7 @@
 
     <x-dialog-modal wire:model="open">
         <x-slot name="title">
-            <h2 class="text-2xl font-bold">Persmisos Coneciones</h2>
+            <h2 class="text-2xl font-bold">Persmisos en Talleres</h2>
         </x-slot>
         <x-slot name="content">
 {{--            @dump($user)--}}
@@ -25,18 +25,21 @@
                 <div class="text-red-500">@error('email') {{ $message }} @enderror</div>
             </div>
 
+            {{$role_to_remove}}
 
             <div class="mt-6">
                 <table class="w-full">
                     @foreach($user_connections as $key => $value)
                         <tr>
-                            <th class="text-start">{{$value['connection']->name}}</th>
+                            <th class="text-start py-2">{{$value['connection']->name}}</th>
 
                             <td>
                             @foreach($value['roles'] as $role)
-                                <span class="rounded-full px-2 py-1 border-2 border-gray-600 bg-gray-300">
+                                <div class="rounded-full inline-block px-2 py-1 border-2 border-gray-600 bg-gray-300">
                                     {{$role->name}}
-                                </span>
+
+                                    <span class="cursor-pointer" wire:click="dettachRoleOfTaller({{$value['id']}})">&cross;</span>
+                                </div>
                             @endforeach
                             </td>
                         </tr>
@@ -44,18 +47,18 @@
                 </table>
             </div>
 
-            <div class="mt-6 flex gap-2">
-                <select>
+            <div class="mt-6 flex justify-between gap-2">
+                <select wire:model.live="connection">
                     @foreach($connections as $connection)
                         <option value="{{$connection->id}}">{{$connection->name}}</option>
                     @endforeach
                 </select>
-                <select>
+                <select wire:model.live="role">
                     @foreach($roles as $role)
                         <option value="{{$role->id}}">{{$role->name}}</option>
                     @endforeach
                 </select>
-                <x-button class="rounded-none">AGREGAR</x-button>
+                <x-button wire:click="assignRoleToTaller" class="rounded-none">AGREGAR</x-button>
             </div>
 
         </x-slot>

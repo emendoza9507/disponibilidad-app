@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('CODIGOOT');
             $table->string('CODIGOM');
             $table->string('TALLER');
+            $table->foreignId('connection_id')->references('id')->on('connections');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('bateria_anterior')->nullable()->references('id')->on('baterias');
             $table->string('OBSERVACIONES')->nullable();

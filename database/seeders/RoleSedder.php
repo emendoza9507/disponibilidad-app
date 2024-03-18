@@ -18,6 +18,8 @@ class RoleSedder extends Seeder
         $admin = Role::create(['name' => 'admin']);
         $tecnico = Role::create(['name'=>'tecnico']);
 
+        Permission::create(['name' => 'admin.app'])->assignRole($admin);
+
         Permission::create(['name' => 'connections.index'])->assignRole($admin);
         Permission::create(['name' => 'new_connection'])->assignRole($admin);
         Permission::create(['name' => 'users.index'])->assignRole($admin);

@@ -6,6 +6,9 @@
                     Nombre
                 </th>
                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                    Centro Costo
+                </th>
+                <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                     HOST
                 </th>
                 <th scope="col" class="text-sm font-medium text-gray-900 px-6 py-4 text-left">
@@ -22,6 +25,9 @@
                 <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" wire:key="{{$con->pluck('id')->join(uniqid())}}">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{$con->name}}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{$con->codigo_taller}}
                     </td>
                     <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                         {{$con->hostname}}

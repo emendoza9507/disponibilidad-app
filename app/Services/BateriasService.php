@@ -12,12 +12,20 @@ use Illuminate\Support\Facades\Config;
 class BateriasService
 {
 
-    public function __construct(protected OrdenTrabajoService $ordenTrabajoService)
+    public function __construct(protected OrdenTrabajoService $ordenTrabajoService, protected ConnectionService $connectionService)
     {}
 
     public function getByCodigoOt(string $codigoot)
     {
         return Bateria::where('CODIGOOT', $codigoot)->get();
+    }
+
+
+    public function getByCodigoCodigoMaestro(string $codigom)
+    {
+        return Bateria::where('CODIGOM', $codigom)
+            ->orderBy('id', 'desc')
+            ->get();
     }
 
     public function getCantidadBateriasCargadas(OrdenTrabajo $ot)
@@ -43,6 +51,8 @@ class BateriasService
         for ($i = $baterias; $i < $bateriasCargadas; $i++) {
             $bateria = new Bateria();
             $bateria->CODIGOOT = $ot->CODIGOOT;
+            $bateria->CODIGOM = $ot->CODIGOM;
+            $bateria->connection_id = $this->connectionService->getCurrentConnection()->id;
             $bateria->TALLER = $ot->Prisma;
             $bateria->user_id = Auth::user()->id;
 

@@ -15,16 +15,16 @@
                 <form class="flex gap-2 justify-between" action="{{route('orden.index')}}">
                     <div class="flex gap-2">
                         <div class="relative">
-                            <x-input id="input-search" class="rounded-none pr-8" placeholder="Buscar"/>
+                            <x-input id="input-search" name="matricula" class="rounded-none pr-8" placeholder="Buscar"/>
                             <span class="absolute right-2 top-2.5 ">@include('icons.search')</span>
                         </div>
 
-                        <x-input class="rounded-none" name="start_date" type="date" value="{{$start_date->format('Y-m-d')}}"/>
-                        <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date->format('Y-m-d')}}"/>
+                        <x-input class="rounded-none" name="start_date" type="date" value="{{$start_date?->format('Y-m-d')}}"/>
+                        <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date?->format('Y-m-d')}}"/>
 
                         <x-button class="rounded-none h-full">GENERAR</x-button>
                     </div>
-                    <select name="connection_id">
+                    <select name="connection_id" onchange="this.form.submit()">
                         @foreach($connections as $connection)
                             <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                 {{$connection->name}}
@@ -46,7 +46,7 @@
 
     $inputSearh.addEventListener('keyup', () => {
         Array.from($dataNeumaticos.children).forEach(($tr => {
-            if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().toLowerCase())) {
+            if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().trim().toLowerCase())) {
                 $tr.classList.remove('hidden')
             } else {
                 $tr.classList.add('hidden')

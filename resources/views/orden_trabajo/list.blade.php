@@ -16,7 +16,9 @@
         @foreach($ordenes as $ot)
             @php($importe_total += $ot->IMPORTESERVICIO)
             <tr class="hover:bg-gray-100">
-                <td class="py-3">{{$ot->CODIGOOT}}</td>
+                <td class="py-3">
+                    <a href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">{{$ot->CODIGOOT}}</a>
+                </td>
                 <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
@@ -27,7 +29,7 @@
                 </td>
                 <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
                 <td class="px-2">
-                    <a class="flex justify-end" href="{{route('orden.show', $ot->CODIGOOT)}}">
+                    <a class="flex print:hidden justify-end" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id'=>$connection_id])}}">
                         @include('icons.settings')
                     </a>
                 </td>

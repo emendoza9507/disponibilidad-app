@@ -14,18 +14,16 @@ class RNeumaticoController extends Controller
     //
     public function index(Request $request, NeumaticosService $neumaticosService, ConnectionService $connectionService)
     {
-        $connections = Connection::all();
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
         $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subMonth(1);
-        $connection_id = $request->query->get('connection_id') ?: $connections[0]->id;
+        $connection_id = $request->query->get('connection_id', 1);
         $connectionService->setConnection($connection_id);
 
         $resumenNeumaticos = $neumaticosService->resumenNeumaticosPorMesAnno($start_date, $end_date);
 
         return view('reportes.neumatico.index',compact(
             'resumenNeumaticos',
-            'start_date','end_date', 'connections',
-            'connection_id'
+            'start_date','end_date', 'connection_id'
         ));
     }
 }

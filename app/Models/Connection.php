@@ -15,6 +15,7 @@ class Connection extends Model
         'database',
         'username',
         'password',
-        'description'
+        'description',
+        'codigo_taller'
     ];
 }

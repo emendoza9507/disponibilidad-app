@@ -9,20 +9,21 @@
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div id="reporte-ot" class="p-6 lg:p-8 bg-white border-b border-gray-200 relative">
                 @if($ot)
-                    <div class="hidden print:block mb-3 border-b-2">
-                        <h3 class="text-2xl font-bold uppercase">Orden de Trabajo</h3>
+                    <div class="hidden print:block mb-3 border-b-2 overflow-hidden">
+                        <h3 class="text-2xl float-start clear-both font-bold uppercase">Orden de Trabajo</h3>
+                        <span class="text-xl float-end">{{$ot->CODIGOOT}}</span>
                     </div>
 
-                    <div class="grid lg:gap-12 lg:grid-cols-2">
+                    <div class="grid lg:gap-12 lg:grid-cols-2 bg-gray-100">
                         <div class="flex flex-col">
-                            <div class="flex text-xl justify-between">
+                            <div class="flex print:hidden text-xl justify-between">
                                 <h3 class="font-bold">OT:</h3>
                                 <span>{{$ot->CODIGOOT}}</span>
                             </div>
 
                             <div class="flex text-xl justify-between">
                                 <h3 class="font-bold">MATRICULA:</h3>
-                                <a href="{{route('autos.show', $ot->CODIGOM)}}" class="underline">{{$ot->MATRICULA}}</a>
+                                <a href="{{route('autos.show', [$ot->CODIGOM, 'connection_id' => $connection_id])}}" class="underline">{{$ot->MATRICULA}}</a>
                             </div>
 
                             <div class="flex text-xl  justify-between">
@@ -51,10 +52,20 @@
                                 <h3 class="font-bold">KM/S:</h3>
                                 <span>{{number_format($ot->kmsalida,2)}}</span>
                             </div>
+
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">DEPOSITO/E:</h3>
+                                <span>{{number_format($ot->DEPOSITOENTRADA,2)}}</span>
+                            </div>
+
+                            <div class="flex text-xl justify-between">
+                                <h3 class="font-bold">DEPOSITO/S:</h3>
+                                <span>{{number_format($ot->DEPOSITOSALIDA,2)}}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <h3 class="text-xl font-bold uppercase">Diagnostico</h3>
+                    <h3 class="text-xl mt-3 font-bold uppercase">Diagnostico</h3>
                     <div>
                         <p>{{$ot->DIAGNOSTICO}}</p>
                     </div>
@@ -67,10 +78,10 @@
                     </div>
                     <br>
 
-                    <h3 class="text-xl font-bold uppercase">Materiales</h3>
-                    <div style="max-height: 400px" class="overflow-y-auto">
-                        <table class="w-full">
-                            <thead>
+                    <h3 class="text-xl bg-gray-300 border-gray-300 font-bold inline-block uppercase">Materiales</h3>
+                    <div  class="overflow-y-auto mb-5">
+                        <table class="w-full border-2 border-gray-300">
+                            <thead class="">
                             <tr>
                                 <th class="text-start">DESCRIPCION</th>
                                 <th class="text-end">CANTIDAD</th>
@@ -88,7 +99,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                            <tfoot>
+                            <tfoot class="sticky bottom-0 bg-gray-300">
                             <tr>
                                 <th colspan="2" class="text-start">IMPORTE MATERIAL</th>
                                 <td class="text-end font-bold">{{number_format($importe_material)}}$</td>
@@ -97,10 +108,10 @@
                         </table>
                     </div>
 
-                    <h3 class="mt-2 text-xl font-bold uppercase">Mano de Obra</h3>
-                    <div style="max-height: 400px" class="overflow-y-auto">
-                        <table class="w-full">
-                            <thead>
+                    <div class="">
+                        <h3 class="text-xl font-bold inline-block border-2 border-b-0 bg-gray-300 border-gray-300 uppercase">Mano de Obra</h3>
+                        <table class="w-full border-2 border-gray-300">
+                            <thead class="">
                             <tr>
                                 <th class="text-start">DESCRIPCION</th>
                                 <th class="text-start">OPERARIO</th>
@@ -118,7 +129,7 @@
                                 </tr>
                             @endforeach
                             </tbody>
-                            <tfoot>
+                            <tfoot class="sticky bottom-0 bg-gray-300">
                             <tr>
                                 <th colspan="2" class="text-start">IMPORTE OBRA</th>
                                 <td class="text-end font-bold">{{number_format($importe_obra)}}$</td>
@@ -134,6 +145,9 @@
                     </table>
 
                     <div class="mt-5 text-end">
+                        <x-button onclick="history.back()" class="print:hidden bg-gray-600 text-black hover:text-white rounded-none">
+                            @include('icons.back')
+                        </x-button>
                         <x-button id="btn-print" class="print:hidden bg-yellow-600 text-black hover:text-white rounded-none">
                             @include('icons.printer')
                             IMPRIMIR
@@ -153,6 +167,12 @@
         const $btnPrint = document.querySelector('#btn-print');
         const $areaPrint = document.querySelector('#reporte-ot');
 
-        reportPrint($btnPrint, $areaPrint)
+        reportPrint($btnPrint, $areaPrint, ($printer) => {
+            const $classes = ['border-gray-300', 'bg-gray-300', 'border-2']
+
+            console.log($printer.getElementsByClassName(...$classes))
+
+            Array.from($printer.getElementsByClassName(...$classes)).forEach(node => node.classList.remove(...$classes))
+        })
     })
 </script>

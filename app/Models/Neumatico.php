@@ -15,4 +15,18 @@ class Neumatico extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function connection()
+    {
+        return $this->hasOne(Connection::class,'codigo_taller', 'TALLER');
+    }
+
+    public function consecutivo() {
+        return $this->created_at->format('y') . $this->id;
+    }
+
+    public function anterior()
+    {
+        return $this->neumatico_anterior ? $this->created_at->format('y') . $this->neumatico_anterior : null;
+    }
 }

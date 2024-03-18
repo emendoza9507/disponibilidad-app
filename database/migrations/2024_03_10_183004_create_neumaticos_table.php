@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('CODIGOOT');
             $table->string('CODIGOM');
             $table->string('TALLER');
+            $table->foreignId('connection_id')->references('id')->on('connections');
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('neumatico_anterior')->nullable()->references('id')->on('neumaticos');
             $table->string('OBSERVACIONES')->nullable();
+
             $table->timestamps();
         });
     }

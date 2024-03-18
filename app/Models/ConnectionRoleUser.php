@@ -11,6 +11,10 @@ class ConnectionRoleUser extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    public $timestamps = null;
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

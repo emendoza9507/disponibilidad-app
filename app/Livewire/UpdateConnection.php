@@ -15,6 +15,9 @@ class UpdateConnection extends Component
     public $name;
 
     #[Validate('required')]
+    public $codigo_taller;
+
+    #[Validate('required')]
     public $database;
 
     #[Validate('required')]
@@ -34,6 +37,7 @@ class UpdateConnection extends Component
     public function mount($connection) {
         $this->connection = $connection;
         $this->name = $this->connection->name;
+        $this->codigo_taller = $this->connection->codigo_taller;
         $this->database = $this->connection->database;
         $this->hostname = $this->connection->hostname;
         $this->username = $this->connection->username;
@@ -48,6 +52,7 @@ class UpdateConnection extends Component
 
     public function save() {
         $this->connection->name = $this->name;
+        $this->connection->codigo_taller = $this->codigo_taller;
         $this->connection->hostname = $this->hostname;
         $this->connection->database = $this->database;
         $this->connection->username = $this->username;

@@ -14,6 +14,11 @@
     </div>
 
     <div class="mt-4">
+        <x-label for="database" value="{{ __('Centro de Costo') }}"/>
+        <x-input id="database" class="block mt-1 w-full" type="text" name="codigo_taller" :value="old('database')" required autocomplete="database"/>
+    </div>
+
+    <div class="mt-4">
         <x-label for="hostname" value="{{ __('Direccion del Servidor') }}"/>
         <x-input id="hostname" class="block mt-1 w-full" type="text" name="hostname" :value="old('hostname')" required autocomplete="hostname"/>
     </div>

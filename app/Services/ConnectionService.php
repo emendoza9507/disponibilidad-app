@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\ResetDB;
 use App\Models\Connection;
 use App\Models\Mistral\Parametro;
 
@@ -22,6 +23,15 @@ class ConnectionService
             ]]);
         }
 
+        ResetDB::setDBConfig('taller', (array) session('connection'));
+
         return $connection;
+    }
+
+    public function getCurrentConnection()
+    {
+        $session_connection_id = session('connection') ? session('connection')['connection_id'] : 1;
+
+        return $session_connection_id ? Connection::find($session_connection_id) : null;
     }
 }

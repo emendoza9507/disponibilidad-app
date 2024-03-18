@@ -27,6 +27,7 @@ class ConnectionController extends Controller
             'name' => $request->get('name'),
             'hostname' => $request->get('hostname'),
             'database' => $request->get('database'),
+            'codigo_taller' => strtoupper($request->get('codigo_taller')),
             'username' => $request->get('username'),
             'password' => $request->get('password'),
             'description' => $request->get('description', 'Conecion de Base de Datos')

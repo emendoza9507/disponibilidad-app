@@ -19,8 +19,3 @@ use App\Http\Controllers\ConnectionController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return 'asdas';
 });
-
-Route::controller(ConnectionController::class)->prefix('connections')->group(function () {
-    Route::get('/', 'show');
-    Route::post('/', 'store');
-});

@@ -9,7 +9,12 @@ class Material extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = 'CODIGOM';
+    protected $primaryKey = 'CODIGOOT';
     protected $connection = 'taller';
     protected $table = 'material';
+
+    public function orden()
+    {
+        return $this->belongsTo(OrdenTrabajo::class, 'CODIGOOT', 'CODIGOOT');
+    }
 }

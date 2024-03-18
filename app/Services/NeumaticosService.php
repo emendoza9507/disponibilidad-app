@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Config;
 class NeumaticosService
 {
 
-    public function __construct(protected OrdenTrabajoService $ordenTrabajoService)
+    public function __construct(protected OrdenTrabajoService $ordenTrabajoService,protected ConnectionService $connectionService)
     {}
 
     public function resumenNeumaticosPorMesAnno($start_date, $end_date)
@@ -81,12 +81,14 @@ class NeumaticosService
         return Neumatico::where('CODIGOOT', $codigoot)->get();
     }
 
-    public function getByCodigoCodigoMaestro(string $codigom)
+    public function getByCodigoCodigoMaestro(string $codigom, $show = 5)
     {
         return Neumatico::where('CODIGOM', $codigom)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate($show)
+            ->withQueryString();
     }
+
 
     public function getCantidadNeumaticosCargados(OrdenTrabajo $ot)
     {
@@ -113,6 +115,7 @@ class NeumaticosService
             $neumatico = new Neumatico();
             $neumatico->CODIGOOT = $ot->CODIGOOT;
             $neumatico->CODIGOM = $ot->CODIGOM;
+            $neumatico->connection_id = $this->connectionService->getCurrentConnection()->id;
             $neumatico->TALLER = $ot->Prisma;
             $neumatico->user_id = Auth::user()->id;
 
