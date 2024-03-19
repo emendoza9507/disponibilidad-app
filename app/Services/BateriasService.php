@@ -4,8 +4,11 @@ namespace App\Services;
 
 use App\Helpers\ResetDB;
 use App\Models\Bateria;
+use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
 use App\Models\Neumatico;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
@@ -62,4 +65,5 @@ class BateriasService
 
         return $consecutivos;
     }
+
 }

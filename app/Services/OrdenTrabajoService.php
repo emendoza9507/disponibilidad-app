@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use App\Helpers\ResetDB;
+use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Config;
 
 class OrdenTrabajoService
@@ -136,5 +139,24 @@ class OrdenTrabajoService
         }
 
         return $materiales;
+    }
+
+
+    public function getLastOtWithMaterialType($material, string $codigom = null)
+    {
+        $materiales = Material::join('orden_trabajo', function (JoinClause $join) {
+            $join->on('orden_trabajo.CODIGOOT', '=', 'material.CODIGOOT');
+        })
+            ->where('AREA', $material)
+            ->where('CANTIDAD', '>', 0)
+            ->select('material.CODIGOOT');
+
+        return OrdenTrabajo::whereIn('CODIGOOT', $materiales)
+            ->whereNotNull('FECHACIERRE')
+            ->when($codigom, function (Builder $query, string $codigom) {
+                $query->where('CODIGOM', $codigom);
+            })
+            ->orderBy('FECHACIERRE', 'DESC')
+            ->first();
     }
 }

@@ -1,5 +1,5 @@
 import './bootstrap';
-
+import moment from "moment-with-locales-es6";
 
 
 function reportPrint($btnPrint, $areaPrint, callback) {
@@ -45,3 +45,4 @@ function reportPrint($btnPrint, $areaPrint, callback) {
 }
 
 window.reportPrint = reportPrint
+window.moment = moment

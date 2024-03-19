@@ -183,19 +183,7 @@ class CNeumaticoController extends Controller
                 'taller' => $connectionService->getCurrentConnection()->codigo_taller
             ]);
         }
-
-        $materiales = Material::join('orden_trabajo', function (JoinClause $join) {
-            $join->on('orden_trabajo.CODIGOOT', '=', 'material.CODIGOOT');
-        })
-            ->where('AREA', 'A11')
-            ->where('CANTIDAD', '>', 0)
-            ->select('material.CODIGOOT');
-
-        $orden = OrdenTrabajo::whereIn('CODIGOOT', $materiales)
-            ->whereNotNull('FECHACIERRE')
-            ->where('CODIGOM', $codigom)
-            ->orderBy('FECHACIERRE', 'DESC')
-            ->first();
+        $orden = $ordenTrabajoService->getLastOtWithMaterialType('A11', $codigom);
 
         return new JsonResponse([
             'status' => true,

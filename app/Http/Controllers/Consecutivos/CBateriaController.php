@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Consecutivos;
 use App\Http\Controllers\Controller;
 use App\Models\Bateria;
 use App\Models\Connection;
+use App\Models\Mistral\Material;
+use App\Models\Mistral\OrdenTrabajo;
 use App\Services\AutoService;
 use App\Services\BateriasService;
 use App\Services\ConnectionService;
+use App\Services\NeumaticosService;
 use App\Services\OrdenTrabajoService;
 use Carbon\Carbon;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CBateriaController extends Controller
@@ -121,5 +126,63 @@ class CBateriaController extends Controller
         return view('consecutivo.bateria.show', compact(
             'bateria'
         ));
+    }
+
+    public function showMaestro(Request $request, string $maestro, ConnectionService
+                                        $connectionService, AutoService $autoService
+    )
+    {
+        $connection_id = $request->query->get('connection_id', 1);
+        $connection = $connectionService->setConnection($connection_id);
+        if(!$connection) {
+            return  redirect(route('home'));
+        }
+
+        $maestro = $autoService->getByMaestro($maestro);
+
+        if(!$maestro) {
+            return redirect(route('consecutivo.bateria.index', $request->query->all()));
+        }
+
+        return view('consecutivo.bateria.show_maestro', compact(
+            'maestro'
+        ));
+    }
+
+    public function jsonUltimaOTConNeumaticos(
+        Request $request,
+        string $codigom,
+        ConnectionService $connectionService,
+        OrdenTrabajoService $ordenTrabajoService,
+        BateriasService $bateriasService
+    ) {
+        $connection_id = $request->query->get('connection_id');
+
+        if(!$connection_id) {
+            return new JsonResponse([
+                'status' => false,
+                'data' => null,
+                'error' => 'connection_id is required'
+            ]);
+        }
+
+        $connection = $connectionService->setConnection($connection_id);
+
+        if(!$connection) {
+            return new JsonResponse([
+                'status' => false,
+                'data' => null,
+                'taller' => $connectionService->getCurrentConnection()->codigo_taller
+            ]);
+        }
+
+        $orden = $ordenTrabajoService->getLastOtWithMaterialType('A10', $codigom);
+
+        return new JsonResponse([
+            'status' => true,
+            'data' => $orden,
+            'taller' => $connection->codigo_taller,
+            'connection_id' => $connection->id
+        ]);
     }
 }

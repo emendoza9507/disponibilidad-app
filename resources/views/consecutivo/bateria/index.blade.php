@@ -67,7 +67,7 @@
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
+                                <td><a href="{{route('consecutivo.bateria.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
                                 <td>
@@ -101,7 +101,7 @@
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
+                                <td><a href="{{route('consecutivo.bateria.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
                                 <td>

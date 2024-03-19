@@ -9,7 +9,7 @@
 
                 <div class="mt-3 text-center">
                     <h3 class="text-xl uppercase font-bold inline-block relative">
-                        Ultimos neumaticos cargados en Talleres ({{$maestro->MATRICULA}})
+                        Ultimas baterias cargados en Talleres ({{$maestro->MATRICULA}})
                     </h3>
                 </div>
 
@@ -56,14 +56,15 @@
         const connections = @json($connections).data
 
         const promises = Array.from(connections).map(connection => {
-            return fetch(`{{route('consecutivo.neumatico.json_last_ot_with_neumatico', $maestro->CODIGOM)}}?connection_id=${connection.id}`)
+            return fetch(`{{route('consecutivo.bateria.json_last_ot_with_bateria', $maestro->CODIGOM)}}?connection_id=${connection.id}`)
                 .then(res => res.json())
         })
 
-        let desconectados = []
+        let desconectados = [];
         Promise
             .all(promises).then(promises => {
                 desconectados = promises.filter((v) => !v.status)
+
                 promises.filter(v => v.status && v.data).sort((t1, t2) => {
                     return new Date(t2.data.FECHACIERRE).getTime() - new Date(t1.data.FECHACIERRE).getTime()
                 }).forEach(promise => {
@@ -163,6 +164,7 @@
 
                     tr.append(td);
                 })
+
             })
 
     })
