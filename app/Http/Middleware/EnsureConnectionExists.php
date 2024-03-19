@@ -6,7 +6,6 @@ use App\Helpers\FlashMessage;
 use App\Models\Connection;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureConnectionExists
