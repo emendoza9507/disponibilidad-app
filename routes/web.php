@@ -41,6 +41,7 @@ Route::middleware([
     })->name('dashboard');
 
     Route::controller(ConnectionController::class)->prefix('connections')->group(function () {
+        Route::get('/check', 'jsonCheckStatusConnection')->name('connections.check');
         Route::get('/', 'index')->name('connections.index');
         Route::get('/{name}', 'show')->name('connections.show');
         Route::post('/', 'store')->name('new_connection');

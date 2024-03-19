@@ -43,5 +43,39 @@
         @stack('modals')
 
         @livewireScripts
+        @stack('scripts')
+
+        <script>
+
+            const connections = @json($connections).data;
+
+            window.addEventListener('DOMContentLoaded', () => {
+                const $selectConnections = document.querySelector('#select-connection');
+
+                console.log($selectConnections)
+
+                if($selectConnections) {
+                    checkConnectaionsState((id, status, connection) => {
+                        if(status === false) {
+                            Array.from($selectConnections.children).filter(option => option.value === id).forEach(option => {
+                                option.disabled = true
+                            })
+                        }
+                    });
+                }
+            })
+
+
+            function checkConnectaionsState(callback) {
+                connections.forEach((connection) => {
+
+                    axios.get(`{{route('connections.check')}}?connection_id=${connection.id}`)
+                        .then(({data}) => data)
+                        .then(({data, connection_id, status}) => {
+                            callback(connection_id, status, data)
+                        })
+                })
+            }
+        </script>
     </body>
 </html>

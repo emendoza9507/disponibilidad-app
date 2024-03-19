@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Connection;
+use App\Services\ConnectionService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreConnectionRequest;
 
@@ -34,6 +36,35 @@ class ConnectionController extends Controller
         ]);
 
         return redirect('/connections');
+    }
+
+    public function jsonCheckStatusConnection(Request $request, ConnectionService $connectionService)
+    {
+        $connection_id = $request->query->get('connection_id');
+
+        if (!$connection_id) {
+            return new JsonResponse([
+                'status' => false,
+                'error' => 'connection_id is required'
+            ]);
+        }
+
+        $connection = $connectionService->setConnection($connection_id);
+
+        if(!$connection) {
+            return new JsonResponse([
+                'status' => false,
+                'connection_id' => $connection_id,
+                'error' => 'Desconectado'
+            ]);
+        }
+
+        return new JsonResponse([
+            'status' => true,
+            'connection_id' => $connection_id,
+            'data' => $connection,
+            'susses' => 'Coneccion establecida satisfactoriamente'
+        ]);
     }
 
     /**

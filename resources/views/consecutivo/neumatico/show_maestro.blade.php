@@ -19,12 +19,13 @@
                         <thead>
                             <th>TALLER</th>
                             <th>OT</th>
+                            <th>KILOMETROS</th>
                             <th>FECHA</th>
                         </thead>
                         <tbody id="data-ordenes">
                             <tr>
-                                <td colspan="3" class="text-center">
-                                    <span class="text-red-300"> Cargando datos pro favor espere...</span>
+                                <td colspan="4" class="text-center">
+                                    <span class="text-red-300"> Cargando datos por favor espere...</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -66,7 +67,7 @@
                 desconectados = promises.filter((v) => !v.status)
                 promises.filter(v => v.status && v.data).sort((t1, t2) => {
                     return new Date(t2.data.FECHACIERRE).getTime() - new Date(t1.data.FECHACIERRE).getTime()
-                }).forEach(promise => {
+                }).forEach((promise, index, conectados) => {
                     const tr = document.createElement('tr');
                     $dataOrdenes.append(tr);
 
@@ -91,6 +92,25 @@
                                     span.addEventListener('click', () => {
                                         location.href = `${location.origin}/orden/${ot}?connection_id=${promise.connection_id}`
                                     })
+                                },
+                                (td, promise) => {
+                                    const km = promise.data?.KMENTRADA;
+                                    const span = document.createElement('span')
+                                    span.append(promise.data?.KMENTRADA)
+                                    td.append(span)
+
+                                    //Comprobar vida util de un neumatico
+                                    //Promedio de vida util del neumatico R13 40 000
+                                    const vida_util_neumatico = 40000;
+                                    if(conectados[index + 1] !== undefined) {
+
+                                        const next_mk = conectados[index + 1].data.KMENTRADA
+
+                                        if((km - next_mk) < vida_util_neumatico) {
+                                            span.classList.add('text-red-400')
+                                            span.title = 'Minima vida util R13, 40M KM.'
+                                        }
+                                    }
                                 },
                                 // Mostrar fecha
                                 (td, promise) => {
@@ -146,7 +166,7 @@
 
                 const tdIndex = document.createElement('th');
                 tdIndex.classList.add('text-center')
-                tdIndex.colSpan = desconectados.length
+                tdIndex.rowSpan = desconectados.length
                 tdIndex.append('DESCONECTADOS')
 
                 desconectados.forEach((taller, index) => {

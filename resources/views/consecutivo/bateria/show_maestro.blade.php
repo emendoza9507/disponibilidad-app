@@ -19,12 +19,13 @@
                         <thead>
                             <th>TALLER</th>
                             <th>OT</th>
+                            <th>KILOMETROS</th>
                             <th>FECHA</th>
                         </thead>
                         <tbody id="data-ordenes">
                             <tr>
-                                <td colspan="3" class="text-center">
-                                    <span class="text-red-300"> Cargando datos pro favor espere...</span>
+                                <td colspan="4" class="text-center">
+                                    <span class="text-red-300"> Cargando datos por favor espere...</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -92,6 +93,9 @@
                                     span.addEventListener('click', () => {
                                         location.href = `${location.origin}/orden/${ot}?connection_id=${promise.connection_id}`
                                     })
+                                },
+                                (td, promise) => {
+                                    td.append(promise.data?.KMENTRADA)
                                 },
                                 // Mostrar fecha
                                 (td, promise) => {
