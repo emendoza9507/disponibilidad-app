@@ -6,6 +6,7 @@ use App\Http\Controllers\Consecutivos\CNeumaticoController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\NeumaticoController;
 use App\Http\Controllers\OrdenTrabajoController;
+use App\Http\Controllers\Reportes\RAutoMaterialController;
 use App\Http\Controllers\Reportes\RBateriaController;
 use App\Http\Controllers\Reportes\RMantenimientosController;
 use App\Http\Controllers\Reportes\RNeumaticoController;
@@ -66,6 +67,9 @@ Route::middleware([
         Route::name('reporte')->resource('reporte/produccion/proceso', RProduccionProceso::class)->only('index');
         Route::name('reporte')->resource('reporte/ordenes', ROrdenesEstadoController::class)->only('index');
         Route::name('reporte')->resource('reporte/mantenimiento', RMantenimientosController::class)->only('index');
+        Route::name('reporte')->controller(RAutoMaterialController::class)->prefix('reporte/auto/material')->group(function() {
+            Route::name('.auto.material')->get('/{codigom?}', 'index');
+        });
 
         Route::resource('orden', OrdenTrabajoController::class)->only(['index', 'show']);
 

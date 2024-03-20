@@ -16,7 +16,7 @@
                     <div class="flex gap-2">
                         <h3 class="uppercase text-xl font-bold">Producción en Proceso {{$connection->name}} ({{$connection->codigo_taller}})</h3>
                     </div>
-                    <select name="connection_id" class="print:hidden" onchange="this.form.submit()">
+                    <select id="select-connection" name="connection_id" is="select-connection" class="print:hidden">
                         @foreach($connections as $connection)
                             <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                 {{$connection->name}}

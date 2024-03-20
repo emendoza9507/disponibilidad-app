@@ -23,7 +23,7 @@
 
                         <x-button id="btn-alerta" type="button" class="rounded-none h-full bg-red-400">ALERTAS</x-button>
                     </div>
-                    <select name="connection_id" onchange="this.form.submit()">
+                    <select id="select-connection" name="connection_id" is="select-connection">
                         @foreach($connections as $connection)
                             <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                 {{$connection->name}}
@@ -53,7 +53,11 @@
                                     <a href="{{route('orden.show', $key)}}">{{$key}}</a>
                                 </td>
                                 <td class="pr-2">{{\Carbon\Carbon::create($value['ot']->FECHAENTRADA)->format('d/m/Y')}}</td>
-                                <td class="pr-2">{{$value['ot']->MATRICULA}}</td>
+                                <td class="pr-2">
+                                    <a href="{{route('consecutivo.neumatico.show_maestro', [$value['ot']->CODIGOM])}}">
+                                        {{$value['ot']->MATRICULA}}
+                                    </a>
+                                </td>
                                 <td class="px-2 text-right">{{$value['neumaticos']}}</td>
                             </tr>
                         @endforeach

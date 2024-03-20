@@ -22,7 +22,7 @@
 
                         <x-button id="btn-alerta" type="button" class="rounded-none h-full bg-red-400">ALERTAS</x-button>
                     </div>
-                    <select name="connection_id" onchange="this.form.submit()">
+                    <select id="select-connection" name="connection_id" is="select-connection">
                         @foreach($connections as $connection)
                             <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                 {{$connection->name}}

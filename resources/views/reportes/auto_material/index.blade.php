@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Mantenimientos por Taller') }}
+            {{ __('Control por Materiales') }}
         </h2>
     </x-slot>
 
@@ -12,15 +12,15 @@
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div id="reporte" class="p-6 lg:p-8 bg-white border-b border-gray-200">
-                <form class="flex flex-col" action="{{route('reporte.mantenimiento.index')}}">
+                <form class="flex flex-col" action="{{route('reporte.ordenes.index')}}">
                     <div class="flex justify-between gap-2 items-end">
-                        <h3 class="uppercase text-xl font-bold">Mantenimientos {{$connection->name}} ({{$connection->codigo_taller}})</h3>
+                        <h3 class="uppercase text-xl font-bold">Ordenes {{$maestro->MATRICULA}}</h3>
                         <div class="flex gap-2 text-sm">
                             <span class="uppercase"><b>Desde:</b> {{$start_date->format('d/m/Y')}}</span>
                             <span class="uppercase"><b>Hasta:</b> {{$end_date->format('d/m/Y')}}</span>
                         </div>
                     </div>
-                    <div class="mt-3 flex gap-2 print:hidden">
+                    <div class="mt-3 grid grid-rows-2 gap-2 print:hidden">
                         <div class="flex gap-2">
                             <div class="relative">
                                 <x-input id="input-search" name="matricula" class="rounded-none pr-8" placeholder="Buscar"/>
@@ -30,7 +30,7 @@
                             <x-input class="rounded-none" name="start_date" type="date" value="{{$start_date?->format('Y-m-d')}}"/>
                             <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date?->format('Y-m-d')}}"/>
 
-                            <select id="select-connection" name="connection_id" class="print:hidden" is="select-connection">
+                            <select id="select-connection" name="connection_id" is="select-connection" class="print:hidden">
                                 @foreach($connections as $connection)
                                     <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                         {{$connection->name}}
@@ -40,17 +40,26 @@
 
                             <x-button class="rounded-none h-full">GENERAR</x-button>
                         </div>
+
+                        <div is="select-material-area" class="flex">
+                            @foreach($areas as $area)
+                                <option value="{{$area->CODIGO}}">{{$area->DESCRIPCION}}</option>
+                            @endforeach
+                        </div>
                     </div>
                 </form>
 
                 <br>
+
+                <div>
+                    <h3>{{$maestro->MATRICULA}}</h3>
+                </div>
 
                 <div style="max-height: 400px" class="overflow-y-auto">
                     <table class="w-full">
                         <thead class="sticky top-0 bg-white">
                         <tr>
                             <th class="text-start uppercase">OT</th>
-                            <th class="text-start uppercase">MATRICULA</th>
                             <th class="text-start uppercase">ENTRADA</th>
                             <th class="text-start uppercase">KM/E</th>
                             <th class="text-end uppercase w-1">DEPOSITO</th>
@@ -59,27 +68,12 @@
                         </thead>
                         <tbody id="data-ordenes" >
                         @php($importe_total = 0)
-                        @foreach($ordenes as $ot)
-                            @php($importe_total += $ot->IMPORTESERVICIO)
-                            <tr class="hover:bg-gray-100">
-                                <td class="py-3">
-                                    <a href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">{{$ot->CODIGOOT}}</a>
-                                </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
-                                <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
-                                <td>{{$ot->KMENTRADA}}</td>
-                                <td class="text-center">{{$ot->DEPOSITOENTRADA}}</td>
+                        @foreach([] as $ot)
 
-                                <td class="text-end w-1">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
-                            </tr>
                         @endforeach
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-gray-300">
-                        <tr>
-                            <th colspan="3" class="text-left uppercase">Total</th>
-                            <td colspan="2" class="px-2 text-end"><b>MANTENIMIENTOS:</b> {{$ordenes->count()}}</td>
-                            <td class="text-right">{{number_format($importe_total, 2)}}$</td>
-                        </tr>
+
                         </tfoot>
                     </table>
                 </div>

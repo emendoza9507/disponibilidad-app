@@ -27,7 +27,7 @@
 
                         <x-button class="rounded-none h-full">BUSCAR</x-button>
                     </div>
-                    <select name="connection_id">
+                    <select id="select-connection" name="connection_id" is="select-connection">
                         @foreach($connections as $connection)
                         <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                             {{$connection->name}}

@@ -85,7 +85,7 @@
                     <form id="form-select-connection" class="flex mb-2 text-xl items-center" action="{{route('autos.show', $auto->CODIGOM)}}">
                             <h3 class="font-bold">ORDENES DE TRABAJO:</h3>
                             <label class="pl-2 flex">TALLER
-                                <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id">
+                                <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id" is="select-connection">
                                     @foreach($connections as $connection)
                                         <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                         {{$connection->name}}
@@ -101,7 +101,7 @@
                     <div class="mt-5">
                         <form id="form-select-connection" class="flex mb-2 text-xl items-center" action="{{route('autos.show', $auto->CODIGOM)}}">
                             <h3 class="uppercase text-red-400">Sin Ordenes de Trabajo en el taller:</h3>
-                            <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id">
+                            <select id="select-connection" class="py-0 ml-1 m-0" name="connection_id" is="select-connection">
                                 @foreach($connections as $connection)
                                     <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
                                         {{$connection->name}}
@@ -140,10 +140,6 @@
     const $formSelectConnection = document.querySelector('#form-select-connection');
 
     const $ordenesPorTaller = document.querySelector('#ordenes-por-taller')
-
-    $selectConnection.addEventListener('change', () => {
-        $formSelectConnection.submit();
-    })
 
     const connections = @json($connections);
 
