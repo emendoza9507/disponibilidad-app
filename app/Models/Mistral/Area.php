@@ -10,6 +10,7 @@ class Area extends Model
     use HasFactory;
 
     protected $primaryKey = 'CODIGO';
+    protected $keyType = 'string';
     protected $connection = 'taller';
     protected $table = 'tbl_areas';
 

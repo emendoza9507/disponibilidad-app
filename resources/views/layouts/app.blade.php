@@ -52,15 +52,18 @@
         </template>
 
         <script>
-            const connections = @json($connections).data;
+            let connections = @json($connections).data;
             function checkConnectaionsState(callback) {
-                connections.forEach((connection) => {
-                    axios.get(`{{route('connections.check')}}?connection_id=${connection.id}`)
-                        .then(({data}) => data)
-                        .then(({data, connection_id, status}) => {
-                            callback(connection_id, status, data)
-                        })
-                })
+                Promise.all(
+                    connections.map((connection, index) => {
+                        return axios.get(`{{route('connections.check')}}?connection_id=${connection.id}`)
+                            .then(({data}) => data)
+                    })
+                ).then(connections => {
+                    connections.forEach(({data, connection_id, status}, index) => {
+                        callback(connection_id, status, data, index === connections.length - 1)
+                    })
+                }).catch(() => {})
             }
 
             //Lo pongo aki para no compilar si necesito agregar algo
@@ -129,13 +132,18 @@
                     }
                 }
 
-                callbackCheckConnectaionsState(id, status, connection) {
+                callbackCheckConnectaionsState(id, status, connection, isLast) {
                     if(status === false) {
                         Array.from(this.children).filter(option => option.value === id).forEach(option => {
                             option.disabled = true
 
                             // option.classList.add('text-sm','text-white','bg-red-400', 'font-bold')
                         })
+                    }
+
+                    if(isLast) {
+                        console.log(isLast)
+                        this.assignEventChangeAutoSubmit()
                     }
                 }
 
@@ -160,10 +168,14 @@
                     }
                 }
 
+                assignEventChangeAutoSubmit() {
+                    !this._nosubmit && this.addEventListener('change', this.autoSubmitEvent.bind(this))
+                }
+
                 connectedCallback() {
                     this.initAttrs()
 
-                    !this._nosubmit && this.addEventListener('change', this.autoSubmitEvent.bind(this))
+                    // this.assignEventChangeAutoSubmit()
                     //
                     this._check && checkConnectaionsState(this.callbackCheckConnectaionsState.bind(this));
                 }
@@ -173,21 +185,11 @@
             class SelectMaterialArea extends HTMLSelectElement {
                 constructor() {
                     super()
-                        .attachShadow({mode: 'open'})
-                        .innerHTML = `
-                            <link rel="stylesheet" href="/build/assets/app.css"/>
-                            <select id="select-area">
-                                <option class="disabled:opacity-25" value="">AREAS</option>
-                            <select>
-                            <select id="select-material"></select>
-                        `;
 
-                    this._$select_area = this.shadowRoot.querySelector('#select-area')
-                    this._$select_material = null
                 }
 
                 connectedCallback() {
-                    this.querySelectorAll('option').forEach(option => this._$select_area.append(option))
+
                 }
             }
             customElements.define('select-material-area', SelectMaterialArea, {extends: 'select'})

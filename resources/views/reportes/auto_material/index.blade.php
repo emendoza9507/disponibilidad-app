@@ -12,7 +12,7 @@
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div id="reporte" class="p-6 lg:p-8 bg-white border-b border-gray-200">
-                <form class="flex flex-col" action="{{route('reporte.ordenes.index')}}">
+                <form class="flex flex-col" action="{{route('reporte.auto.material', [$maestro->CODIGOM])}}">
                     <div class="flex justify-between gap-2 items-end">
                         <h3 class="uppercase text-xl font-bold">Ordenes {{$maestro->MATRICULA}}</h3>
                         <div class="flex gap-2 text-sm">
@@ -41,35 +41,48 @@
                             <x-button class="rounded-none h-full">GENERAR</x-button>
                         </div>
 
-                        <div is="select-material-area" class="flex">
-                            @foreach($areas as $area)
-                                <option value="{{$area->CODIGO}}">{{$area->DESCRIPCION}}</option>
+                        <select name="area" >
+                            @foreach($areas as $a)
+                                <option @selected($area == $a->CODIGO) value="{{$a->CODIGO}}">{{$a->DESCRIPCION}}</option>
                             @endforeach
-                        </div>
+                        </select>
                     </div>
                 </form>
 
                 <br>
 
-                <div>
-                    <h3>{{$maestro->MATRICULA}}</h3>
-                </div>
 
                 <div style="max-height: 400px" class="overflow-y-auto">
                     <table class="w-full">
-                        <thead class="sticky top-0 bg-white">
+                        <thead class="sticky top-0 bg-gray-300">
                         <tr>
-                            <th class="text-start uppercase">OT</th>
-                            <th class="text-start uppercase">ENTRADA</th>
-                            <th class="text-start uppercase">KM/E</th>
-                            <th class="text-end uppercase w-1">DEPOSITO</th>
-                            <th class="text-end uppercase pl-3">IMPORTE</th>
+                            <th class="text-start uppercase ">OT</th>
+                            <th class="text-start uppercase">FECHA</th>
+                            <th class="text-end uppercase">
+                                <div class="flex justify-between">
+                                    <span>MATERIALES</span>
+                                    <span>CANTIDAD</span>
+                                </div>
+                            </th>
+                            <th class="text-end uppercase pl-3">IMPORTE EN MATERIAL</th>
                         </tr>
                         </thead>
                         <tbody id="data-ordenes" >
                         @php($importe_total = 0)
-                        @foreach([] as $ot)
-
+                        @foreach($ordenes as $ot)
+                            <tr class="border-b-2 border-gray-300">
+                                <td class="py-2">{{$ot->CODIGOOT}}</td>
+                                <td>{{$ot->FECHACIERRE}}</td>
+                                <td class="flex flex-col">
+                                    @foreach($ot->materials as $material)
+                                        <div class="flex justify-between">
+                                            <span>{{$material->DESCRIPCION}}</span>
+                                            <span>{{$material->CANTIDAD}}</span>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}</td>
+                            </tr>
                         @endforeach
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-gray-300">

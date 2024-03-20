@@ -49,6 +49,7 @@
                             <th class="text-start uppercase">MATRICULA</th>
                             <th class="text-start uppercase">ENTRADA</th>
                             <th class="text-start uppercase">SALIDA</th>
+                            <th class="text-start uppercase">ESTADO</th>
                             <th class="text-start uppercase">CONSECUTIVOS</th>
                             <th class="text-end uppercase">IMPORTE</th>
                             <th class="px-2 text-end uppercase">Cant. Baterias</th>
@@ -63,13 +64,16 @@
                             @php($total_baterias += $ot->cant_baterias)
                             <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
                                 <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', $ot->CODIGOOT)}}">
+                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
                                 <td><a href="{{route('consecutivo.bateria.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
+                                <td>
+                                    @include('consecutivo.partials.estado')
+                                </td>
                                 <td>
                                     @if($ot->consecutivoBaterias->count() == 0)
                                         <form action="{{route('consecutivo.bateria.store', [null, 'connection_id' => $connection_id])}}" method="POST">
@@ -97,13 +101,16 @@
                             @php($total_baterias += $ot->cant_baterias)
                             <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
                                 <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', $ot->CODIGOOT)}}">
+                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
                                 <td><a href="{{route('consecutivo.bateria.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
+                                <td>
+                                    @include('consecutivo.partials.estado')
+                                </td>
                                 <td>
                                     @if($ot->consecutivoBaterias->count() == 0)
 

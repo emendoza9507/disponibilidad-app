@@ -141,8 +141,6 @@
 
     const $ordenesPorTaller = document.querySelector('#ordenes-por-taller')
 
-    const connections = @json($connections);
-
     function loadOrdenerPorTaller($connection, $parent) {
         return fetch('{{route('auto.show.ordenes', $auto->CODIGOM)}}' + `?connection_id=${$connection.id}`)
             .then(res => res.json())
@@ -151,7 +149,7 @@
             })
     }
 
-    const promises = Array.from(connections.data).map(connection => loadOrdenerPorTaller(connection, $ordenesPorTaller))
+    const promises = Array.from(connections).map(connection => loadOrdenerPorTaller(connection, $ordenesPorTaller))
 
     Promise.all(promises).then((ordenes) => {
         let abiertas = 0, cerradas = 0, total = 0
@@ -169,7 +167,7 @@
             if(conecion_estado) {
                 tr.innerHTML = `
                     <td>
-                        <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
+                        <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections[index].id}">
                             ${taller.taller}
                         </a>
                     </td>
@@ -180,7 +178,7 @@
             } else {
                 tr.innerHTML = `
                     <td>
-                        <a class="text-red-300 text-bold" href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections.data[index].id}">
+                        <a class="text-red-300 text-bold" href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections[index].id}">
                             ${taller.taller}
                         </a>
                     </td>
