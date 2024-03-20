@@ -53,6 +53,7 @@
                             <th class="text-start uppercase">MATRICULA</th>
                             <th class="text-start uppercase">ENTRADA</th>
                             <th class="text-start uppercase">SALIDA</th>
+                            <th class="text-start uppercase">ESTADO</th>
                             <th class="text-start uppercase">CONSECUTIVOS</th>
                             <th class="text-end uppercase">IMPORTE</th>
                             <th class="px-2 text-end uppercase">Cant. Neumaticos</th>
@@ -67,13 +68,16 @@
                             @php($total_neumaticos += $ot->cant_neumaticos)
                             <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
                                 <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', $ot->CODIGOOT)}}">
+                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
                                 <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
+                                <td>
+                                    @include('consecutivo.partials.estado')
+                                </td>
                                 <td>
                                     @if($ot->consecutivoNeumaticos->count() == 0)
                                         <div class="flex">
@@ -108,13 +112,16 @@
                             @php($total_neumaticos += $ot->cant_neumaticos)
                             <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
                                 <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', $ot->CODIGOOT)}}">
+                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
                                         {{$ot->CODIGOOT}}
                                     </a>
                                 </td>
                                 <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
+                                <td class="text-start">
+                                    @include('consecutivo.partials.estado')
+                                </td>
                                 <td>
                                     @if($ot->consecutivoNeumaticos->count() == 0)
                                         <div class="flex">

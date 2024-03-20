@@ -4,6 +4,10 @@ namespace App\Services;
 
 use App\Helpers\ResetDB;
 use App\Models\Mistral\Maestro;
+use App\Models\Mistral\Material;
+use App\Models\Mistral\OrdenTrabajo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Config;
 
 class AutoService
@@ -26,5 +30,27 @@ class AutoService
     public function getLastAutos(int $limit)
     {
         return Maestro::orderBy('FECHAALTA', 'DESC')->limit($limit)->get();
+    }
+
+    public function getOtsWithMaterialType($material, $start_date, $end_date, string $codigom = null)
+    {
+        $materiales = Material::join('orden_trabajo', function (JoinClause $join) {
+            $join->on('orden_trabajo.CODIGOOT', '=', 'material.CODIGOOT');
+        })
+            ->where('AREA', $material)
+            ->where('CANTIDAD', '>', 0)
+            ->select('material.CODIGOOT');
+
+        return OrdenTrabajo::whereIn('CODIGOOT', $materiales)
+            ->with('materials',  function ($query) use ($material) {
+                $query->where('AREA', $material);
+            })
+            ->whereNotNull('FECHACIERRE')
+            ->when($codigom, function (Builder $query, string $codigom) {
+                $query->where('CODIGOM', $codigom);
+            })
+            ->whereBetween('FECHACIERRE', [$start_date, $end_date])
+            ->orderBy('FECHACIERRE', 'DESC')
+            ->get();
     }
 }
