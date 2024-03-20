@@ -22,4 +22,9 @@ class AutoService
     {
         return Maestro::where('CODIGOM', $maestro)->first();
     }
+
+    public function getLastAutos(int $limit)
+    {
+        return Maestro::orderBy('FECHAALTA', 'DESC')->limit($limit)->get();
+    }
 }

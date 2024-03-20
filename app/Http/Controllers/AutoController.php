@@ -22,7 +22,7 @@ class AutoController extends Controller
     {
         $connection_id = $request->query->get('connection_id',1);
         $connection = $connectionService->setConnection($connection_id);;
-
+        $limit = $request->query->getInt('limit', 100);
         $matricula = $request->query->get('matricula');
 
         if(!$connection) return redirect(route('home'));
@@ -35,6 +35,8 @@ class AutoController extends Controller
             } catch (\Exception $exception) {
                 return redirect(route('autos.index'))->with('error', $exception->getMessage());
             }
+        } else {
+            $autos = $autoService->getLastAutos($limit);
         }
 
         return view('auto.index', compact(
