@@ -34,7 +34,7 @@ class CNeumaticoController extends Controller
         NeumaticosService   $neumaticosService)
     {
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
-        $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subDay(1);
+        $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subMonth(1);
         $connection_id = $request->query->get('connection_id', 1);
         $connection = $connectionService->setConnection($connection_id, function () {
             back();
@@ -129,9 +129,23 @@ class CNeumaticoController extends Controller
         ));
     }
 
+    public function jsonAll(Request $request)
+    {
+        $query = $request->query->get('query', '');
+
+        return new JsonResponse(Neumatico::where('id', 'LIKE', '%'.$query.'%')->get());
+    }
+
     public function show(Neumatico $neumatico)
     {
         return view('consecutivo.neumatico.show', compact(
+            'neumatico'
+        ));
+    }
+
+    public function edit(Neumatico $neumatico)
+    {
+        return view('consecutivo.neumatico.edit', compact(
             'neumatico'
         ));
     }

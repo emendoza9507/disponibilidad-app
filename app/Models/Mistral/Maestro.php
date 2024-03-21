@@ -18,4 +18,11 @@ class Maestro extends Model
         return $this->belongsTo(SuperMaestro::class, 'CODIGOSM', 'CODIGOSM');
     }
 
+
+    public function scopeWithSupermaestro($query) {
+        $query->with('supermaestro', function ($query) {
+            $query->with('tipo');
+        });
+    }
+
 }

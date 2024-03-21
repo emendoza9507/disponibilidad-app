@@ -29,7 +29,11 @@ class AutoService
 
     public function getLastAutos(int $limit)
     {
-        return Maestro::orderBy('FECHAALTA', 'DESC')->limit($limit)->get();
+        return Maestro::orderBy('FECHAALTA', 'DESC')
+            ->with('supermaestro' )
+            ->whereNotNull('MATRICULA')
+            ->whereNull('FECHABAJA')
+            ->limit($limit)->get();
     }
 
     public function getOtsWithMaterialType($material, $start_date, $end_date, string $codigom = null)

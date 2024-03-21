@@ -15,6 +15,7 @@ class SuperMaestro extends Model
 
     public $marca;
 
+
     public function tipo()
     {
         return $this->belongsTo(TipoVehiculo::class, 'TIPO');

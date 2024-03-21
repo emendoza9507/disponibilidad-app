@@ -194,6 +194,23 @@
             }
             customElements.define('select-material-area', SelectMaterialArea, {extends: 'select'})
 
+            class LaravelLink extends HTMLElement {
+                constructor() {
+                    super()
+                    this.attachShadow({ mode: "open" });
+                }
+
+                connectedCallback() {
+                    const href = this.getAttribute("href") || "#";
+                    this.shadowRoot.innerHTML = `
+                      <a href="${href}">
+                        <slot></slot>
+                      </a>
+                    `;
+                }
+            }
+            customElements.define('laravel-link', LaravelLink);
+
         </script>
     </body>
 </html>

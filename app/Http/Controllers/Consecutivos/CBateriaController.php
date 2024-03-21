@@ -33,7 +33,7 @@ class CBateriaController extends Controller
         BateriasService $bateriasService)
     {
         $end_date = $request->query->get('end_date') ? Carbon::create($request->query->get('end_date')) : Carbon::create(now());
-        $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subDay(1);
+        $start_date = $request->query->get('start_date') ? Carbon::create($request->query->get('start_date')) : $end_date->copy()->subMonth(1);
         $connection_id = $request->query->get('connection_id', 1);
         $connection = $connectionService->setConnection($connection_id, function () { back(); });;
         $matricula = $request->query->get('matricula');
@@ -124,6 +124,13 @@ class CBateriaController extends Controller
     public function show(Bateria $bateria)
     {
         return view('consecutivo.bateria.show', compact(
+            'bateria'
+        ));
+    }
+
+    public function edit(Bateria $bateria)
+    {
+        return view('consecutivo.bateria.edit', compact(
             'bateria'
         ));
     }

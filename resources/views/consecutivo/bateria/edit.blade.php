@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detalle del Neumatico') }}
+            {{ __('Editar Consecutivo de Bateria') }}
         </h2>
     </x-slot>
 
@@ -11,11 +11,11 @@
         @include('partials.messages')
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div  id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
+            <form  id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
 
 
                 <div class="mt-3 text-center">
-                    <h3 class="text-xl uppercase font-bold inline-block right-2 relative">Neumatico</h3>
+                    <h3 class="text-xl uppercase font-bold inline-block right-2 relative">BATERIA</h3>
                 </div>
 
                 <div class="mt-2 grid grid-cols-1 gap-3 px-0 sm:px-30">
@@ -24,7 +24,7 @@
                             <b class="relative left-10">CONSECUTIVO:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->consecutivo()}}</span>
+                            <span class="relative right-10">{{$bateria->consecutivo()}}</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-6">
@@ -32,7 +32,7 @@
                             <b class="relative left-10">CONSECUTIVO ANTERIOR:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->anterior()}}</span>
+                            <x-input name="anterior" value="{{old('anterior')}}"/>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -40,7 +40,7 @@
                             <b class="relative left-10">TALLER:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->TALLER}}</span>
+                            <span class="relative right-10">{{$bateria->TALLER}}</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -49,8 +49,8 @@
                         </div>
                         <div class="text-end">
                             <span class="relative right-10">
-                                <a href="{{route('orden.show', [$neumatico->CODIGOOT, 'connection_id' => $neumatico->connection_id])}}" class="underline">
-                                    {{$neumatico->CODIGOOT}}
+                                <a href="{{route('orden.show', [$bateria->CODIGOOT, 'connection_id' => $bateria->connection_id])}}" class="underline">
+                                    {{$bateria->CODIGOOT}}
                                 </a>
                             </span>
                         </div>
@@ -60,7 +60,7 @@
                             <b class="relative left-10">CREADA POR:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->user->name}} </span>
+                            <span class="relative right-10">{{$bateria->user->name}} </span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -68,7 +68,7 @@
                             <b class="relative left-10">FECHA CREADA:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->created_at->format('d/m/Y')}}</span>
+                            <span class="relative right-10">{{$bateria->created_at->format('d/m/Y')}}</span>
                         </div>
                     </div>
                     @if($neumatico->cons_manual)
@@ -81,13 +81,13 @@
                             </div>
                         </div>
                     @endif
-                    @if($neumatico->OBSERVACIONES)
+                    @if($bateria->OBSERVACIONES)
                         <div class="grid grid-cols-2">
                             <div>
                                 <b class="relative left-10">OBSERVACIONES:</b>
                             </div>
                             <div class="text-end">
-                                <span class="relative right-10">{{$neumatico->created_at->format('d/m/Y')}}</span>
+                                <span class="relative right-10">{{$bateria->created_at->format('d/m/Y')}}</span>
                             </div>
                         </div>
                     @endif
@@ -97,17 +97,12 @@
                     <x-button onclick="history.back()" class="print:hidden relative right-10 bg-gray-600 text-black hover:text-white rounded-none">
                        @include('icons.back')
                     </x-button>
-                    <a href="{{route('consecutivo.neumatico.edit', [$neumatico->id])}}" class="relative right-10 inline-block">
-                        <x-button class="print:hidden bg-green-600 text-black hover:text-white rounded-none">
-                            @include('icons.edit')
-                        </x-button>
-                    </a>
                     <x-button id="btn-print" class="print:hidden relative right-10 bg-yellow-600 text-black hover:text-white rounded-none">
                         @include('icons.printer')
                         IMPRIMIR
                     </x-button>
                 </div>
-            </div>
+            </form>
         </div>
     </x-container>
 </x-app-layout>

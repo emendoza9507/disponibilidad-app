@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Detalle del Neumatico') }}
+            {{ __('Editar Consecutivo de Neumatico') }}
         </h2>
     </x-slot>
 
@@ -11,7 +11,7 @@
         @include('partials.messages')
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div  id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
+            <form  id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
 
 
                 <div class="mt-3 text-center">
@@ -27,12 +27,12 @@
                             <span class="relative right-10">{{$neumatico->consecutivo()}}</span>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-6 items-center">
                         <div>
                             <b class="relative left-10">CONSECUTIVO ANTERIOR:</b>
                         </div>
-                        <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->anterior()}}</span>
+                        <div class="text-end" is="consecutive-loader">
+                            <x-input id="anterior" class="relative right-10 text-end"  name="anterior" value="{{old('anterior')}}"/>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -71,16 +71,14 @@
                             <span class="relative right-10">{{$neumatico->created_at->format('d/m/Y')}}</span>
                         </div>
                     </div>
-                    @if($neumatico->cons_manual)
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <b class="relative left-10">CONSECUTIVO MANUAL:</b>
-                            </div>
-                            <div class="text-end">
-                                <span class="relative right-10">{{$neumatico->cons_manual}}</span>
-                            </div>
+                    <div class="grid grid-cols-2 items-center">
+                        <div>
+                            <b class="relative left-10">CONSECUTIVO MANUAL:</b>
                         </div>
-                    @endif
+                        <div class="text-end">
+                            <x-input class="relative right-10" name="cons_manual" value="{{old('cons_manual')}}"/>
+                        </div>
+                    </div>
                     @if($neumatico->OBSERVACIONES)
                         <div class="grid grid-cols-2">
                             <div>
@@ -95,27 +93,75 @@
 
                 <div class="mt-5 sm:px-30 text-end">
                     <x-button onclick="history.back()" class="print:hidden relative right-10 bg-gray-600 text-black hover:text-white rounded-none">
-                       @include('icons.back')
+                       Cancelar
                     </x-button>
-                    <a href="{{route('consecutivo.neumatico.edit', [$neumatico->id])}}" class="relative right-10 inline-block">
-                        <x-button class="print:hidden bg-green-600 text-black hover:text-white rounded-none">
-                            @include('icons.edit')
-                        </x-button>
-                    </a>
-                    <x-button id="btn-print" class="print:hidden relative right-10 bg-yellow-600 text-black hover:text-white rounded-none">
-                        @include('icons.printer')
-                        IMPRIMIR
+                    <x-button class="print:hidden relative right-10 bg-green-600 text-black hover:text-white rounded-none">
+{{--                        @include('icons.save')--}}
+                        GUARDAR
                     </x-button>
                 </div>
-            </div>
+            </form>
         </div>
     </x-container>
 </x-app-layout>
 <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const $btnPrint = document.querySelector('#btn-print');
-        const $areaPrint = document.querySelector('#reporte-neumatico');
+    class ConsecutiveLoader extends HTMLElement {
+        data = []
+        currentFocus = -1
 
-        reportPrint($btnPrint, $areaPrint)
+        constructor() {
+            super();
+            this.attachShadow({mode: "open"})
+
+            this.shadowRoot.innerHTML = `
+                <slot></slot>
+            `
+        }
+
+        setData(data) {
+            this.data = data
+            //Comprobar que existe el id del consecutivo anteriror si no existe mostrar el input bordeado de reojo
+
+            let exists = this.data.filter(neumatico => neumatico.id.toString() === this.input.value.toString())
+
+            if(exists.length === 0) {
+                this.input.classList.add('border-2','border-red-300')
+            } else {
+                this.input.classList.remove('border-2', 'border-red-300')
+            }
+        }
+
+        connectedCallback() {
+            const input = this.input = this.querySelector('input');
+
+            if(input) {
+
+                let interval = null
+
+                input.addEventListener('input', () => {
+
+                    if(interval != null) clearTimeout(interval)
+
+                    interval = setTimeout(() => {
+                        axios
+                            .get(`{{route('consecutivo.neumatico.json_all')}}?query=${input.value}`)
+                            .then(({data}) => {
+                                this.setData(data)
+                            })
+                    }, 500)
+                })
+
+
+
+
+            }
+
+        }
+    }
+    customElements.define('consecutive-loader', ConsecutiveLoader);
+
+    window.addEventListener('DOMContentLoaded', () => {
+
+
     })
 </script>
