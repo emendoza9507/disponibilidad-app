@@ -62,8 +62,11 @@
                                 <td class="px-4 text-center">{{$auto->supermaestro?->MODELO}}</td>
                                 <td class="px-4 text-center">{{$auto->NOMOTOR}}</td>
                                 <td class="px-4 text-center">{{$auto->MATRICULAANT}}</td>
-                                <td>
-                                    <a href="{{route('autos.show', $auto->CODIGOM)}}">
+                                <td class="flex gap-2">
+                                    <a title="Consumo" href="{{route('reporte.auto.material', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                        @include('icons.box')
+                                    </a>
+                                    <a title="Ordenes de Trabajo" href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
                                         @include('icons.documents')
                                     </a>
                                 </td>
