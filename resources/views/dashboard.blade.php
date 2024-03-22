@@ -17,7 +17,7 @@
                         </svg>
 
                         <h1 class="text-5xl uppercase font-bold">
-                            Disponibilidad
+                            {{config('app.name')}}
                         </h1>
                     </div>
 
@@ -35,42 +35,42 @@
                 <div class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 p-6 lg:p-8">
                     <div>
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 stroke-gray-400">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 0 1-3-3m3 3a3 3 0 1 0 0 6h13.5a3 3 0 1 0 0-6m-16.5-3a3 3 0 0 1 3-3h13.5a3 3 0 0 1 3 3m-19.5 0a4.5 4.5 0 0 1 .9-2.7L5.737 5.1a3.375 3.375 0 0 1 2.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 0 1 .9 2.7m0 0a3 3 0 0 1-3 3m0 3h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Zm-3 6h.008v.008h-.008v-.008Zm0-6h.008v.008h-.008v-.008Z" />
                             </svg>
+
                             <h2 class="ms-3 text-xl font-semibold text-gray-900">
                                 <a href="">Flota</a>
                             </h2>
                         </div>
 
-                        <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                            Mostrar tabla de Por ajas de la flota por marca y modelo
-                        </p>
+                        <div class="mt-4" @style(['max-height: 200px', 'overflow: hidden'])>
+                            <table is="flota-loader" class="w-full">
+                                <thead class="sticky top-0 bg-gray-200">
+                                </thead>
+                                <tfoot class="sticky bottom-0 bg-gray-200"></tfoot>
+                            </table>
+                        </div>
                     </div>
 
                     <div>
                         <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" class="w-6 h-6 stroke-gray-400">
-                                <path stroke-linecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.348 14.652a3.75 3.75 0 0 1 0-5.304m5.304 0a3.75 3.75 0 0 1 0 5.304m-7.425 2.121a6.75 6.75 0 0 1 0-9.546m9.546 0a6.75 6.75 0 0 1 0 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                             </svg>
+
                             <h2 class="ms-3 text-xl font-semibold text-gray-900">
-                                <a href="https://laracasts.com">Laracasts</a>
+                                <a href="#">Talleres</a>
                             </h2>
                         </div>
 
-                        <p class="mt-4 text-gray-500 text-sm leading-relaxed">
-                            Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                        </p>
-
-                        <p class="mt-4 text-sm">
-                            <a href="https://laracasts.com" class="inline-flex items-center font-semibold text-indigo-700">
-                                Start watching Laracasts
-
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="ms-1 w-5 h-5 fill-indigo-500">
-                                    <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </p>
+                        <div class="mt-4" @style(['max-height: 200px', 'overflow: auto'])>
+                            <table is="connection-state-loader" class="w-full">
+                                <thead class="sticky top-0 bg-gray-200">
+                                </thead>
+                                <tfoot class="sticky bottom-0 bg-gray-200"></tfoot>
+                            </table>
+                        </div>
                     </div>
 
                     <div>
@@ -109,3 +109,192 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    class FlotaLoader extends HTMLTableElement {
+        _route = `{{route('auto.json_flota')}}`
+        _next_page_url = null
+
+        _flota = []
+        _tbody = null
+
+        _page = 1
+        _total = 10
+
+        get flota() {
+            return this._flota
+        }
+
+        set flota(val) {
+            this._flota = val
+        }
+
+        get tbody() {
+            if(!this._tbody) {
+                this._tbody = document.createElement('tbody')
+                this.append(this._tbody)
+            }
+
+            return this._tbody
+        }
+
+        constructor() {
+            super();
+        }
+
+        loadFlota(callback, route) {
+            axios.get(route)
+                .then(({data}) => {
+                    if(data.status) {
+                        this.flota = data.data
+                        callback(this.flota)
+                    }
+                })
+        }
+
+        renderFlota(flota) {
+            flota.forEach(({MARCA, MODELO, total}) => {
+                const tr = document.createElement('tr');
+                this.tbody.append(tr);
+
+                [
+                    (td) => {
+                        td.append(MARCA)
+                    },
+                    (td) => {
+                        td.append(MODELO)
+                    },
+                    (td) => {
+                        td.append(total)
+                    }
+                ].forEach((callback) => {
+                    const td = document.createElement('td')
+                    callback(td)
+
+                    tr.append(td)
+                })
+            })
+        }
+
+        connectedCallback() {
+            this.tHead.append(...['Marca', 'modelo', 'cant.'].map(head => {
+                const th = document.createElement('th')
+                th.classList.add('text-start','uppercase')
+
+                th.append(head)
+
+                return th
+            }))
+
+            this.loadFlota(() => {
+                this.renderFlota(this.flota)
+            }, this._route)
+
+            const trArrotTop = document.createElement('tr')
+            const td = document.createElement('td')
+            td.colSpan = 3
+            td.innerHTML = `
+                <svg style="margin: 0 auto"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
+                </svg>
+            `
+
+            td.onclick = () => {
+                this.parentElement.scrollTo({top: 0, behavior: 'smooth'});
+
+                trArrotTop.remove()
+            }
+
+            trArrotTop.append(td)
+
+            this.tFoot.append(...Array.from({length: 1}).map(() => {
+                const tr = document.createElement('tr')
+
+                const td = document.createElement('td')
+                td.colSpan = 3
+                td.innerHTML = `
+                    <svg style="margin: 0 auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5" />
+                    </svg>
+                `
+
+                td.onclick = () => {
+                    this.parentElement.scrollTo({top: this.parentElement.scrollTop + 100, behavior: 'smooth'})
+                    // this.parentElement.scrollTop = this.parentElement.scrollTop + 100
+
+                    if(this.parentElement.scrollTop !== 0) {
+                        this.tHead.append(trArrotTop)
+                    }
+
+                    if(this.parentElement.scrollTop === this.parentElement.scrollHeight) {
+                        tr.remove()
+                    }
+                }
+
+                tr.append(td)
+                return tr
+            }))
+        }
+    }
+    customElements.define('flota-loader',  FlotaLoader, { extends: 'table' })
+
+    class ConnectionStateLoader extends HTMLTableElement {
+
+        _tbody = null;
+
+        get tbody() {
+            if(!this._tbody) {
+                this._tbody = document.createElement('tbody')
+                this.append(this._tbody)
+            }
+
+            return this._tbody
+        }
+
+        constructor() {
+            super();
+        }
+
+        connectedCallback() {
+            connections.forEach(({id, name, codigo_taller}) => {
+                axios.get(`{{route('connections.check')}}?connection_id=${id}`)
+                    .then(({data}) => {
+                        const tr = document.createElement('tr');
+
+                        [
+                            (td) => {
+                                td.append(name)
+                            },
+                            (td) => {
+                                td.append(codigo_taller)
+
+                                if(data.status) {
+                                    td.classList.add('text-green-400')
+                                }
+                            }
+                        ].forEach(callback => {
+                            const td = document.createElement('td');
+
+                            callback(td);
+
+                            td.classList.add('font-bold')
+
+                            if(!data.status) {
+                                td.classList.add('text-red-300')
+                            }
+
+                            tr.append(td)
+                        })
+
+                        this.tbody.append(tr);
+                    })
+                    .catch(() => {
+                        console.log('asd')
+                    })
+            })
+        }
+    }
+    customElements.define('connection-state-loader',  ConnectionStateLoader, { extends: 'table' })
+
+</script>

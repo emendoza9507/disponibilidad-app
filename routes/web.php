@@ -61,6 +61,7 @@ Route::middleware([
 
         Route::name('auto.show.ordenes')->get('autos/{auto}/ordenes', [AutoController::class, 'jsonShow']);
         Route::resource('autos', AutoController:: class)->only(['index', 'show']);
+        Route::name('auto.json_flota')->get('/auto/json_flota', [AutoController::class, 'jsonFlota']);
 
         Route::name('reporte')->resource('reporte/bateria',RBateriaController::class)->only('index');
         Route::name('reporte')->resource('reporte/neumatico',RNeumaticoController::class)->only('index');

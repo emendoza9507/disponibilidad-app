@@ -153,10 +153,6 @@
                             IMPRIMIR
                         </x-button>
                     </div>
-
-                    <p class="print:block hidden">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias aliquam amet at aut consectetur culpa distinctio dolore eum explicabo harum laudantium libero magni nisi nobis praesentium, recusandae repellat repudiandae.
-                    </p>
                 @endif
             </div>
         </div>

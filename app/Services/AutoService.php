@@ -37,7 +37,8 @@ class AutoService
             ->whereNotNull('MATRICULA')
             ->whereNull('FECHABAJA')
             ->where('MATRICULA', 'LIKE', 'T%')
-            ->groupBy('super_maestro.MARCA', 'super_maestro.MODELO');
+            ->groupBy('super_maestro.MARCA', 'super_maestro.MODELO')
+            ->orderBy('total', 'DESC');
     }
 
     public function getLastAutos(int $limit)

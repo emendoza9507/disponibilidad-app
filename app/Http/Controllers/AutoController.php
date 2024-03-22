@@ -47,22 +47,6 @@ class AutoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreAutoRequest $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      */
     public function show(Request $request, string $auto, OrdenTrabajoService $ordenTrabajoService, ConnectionService $connectionService)
@@ -118,27 +102,30 @@ class AutoController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Auto $auto)
+    public function jsonflota(
+        Request $request,
+        ConnectionService $connectionService,
+        AutoService $autoService
+    )
     {
-        //
-    }
+        $connection_id = $request->query->get('connection_id', 1);
+        $connection = $connectionService->setConnection($connection_id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateAutoRequest $request, Auto $auto)
-    {
-        //
-    }
+        if(!$connection) {
+            return new JsonResponse([
+                'status' => false,
+                'connection_id' => $connection_id,
+                'connection' => $connectionService->getCurrentConnection()
+            ]);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Auto $auto)
-    {
-        //
+        $flota = $autoService->getResumenFlota()->get();
+
+        return new JsonResponse([
+            'status' => true,
+            'connection_id' => $connection_id,
+            'connection' => $connection,
+            'data' => $flota
+        ]);
     }
 }
