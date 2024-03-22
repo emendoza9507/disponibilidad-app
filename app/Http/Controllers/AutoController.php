@@ -39,6 +39,8 @@ class AutoController extends Controller
             $autos = $autoService->getLastAutos($limit);
         }
 
+//        $flota = $autoService->getResumenFlota()->get();
+
         return view('auto.index', compact(
             'connection_id','autos', 'matricula'
         ));

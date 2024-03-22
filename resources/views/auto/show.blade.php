@@ -77,9 +77,6 @@
                         </tr>
                     </table>
                 </div>
-
-
-
                 @isset($ordenes[0])
                 <div class="mt-5">
                     <form id="form-select-connection" class="flex mb-2 text-xl items-center" action="{{route('autos.show', $auto->CODIGOM)}}">
@@ -167,7 +164,7 @@
             if(conecion_estado) {
                 tr.innerHTML = `
                     <td>
-                        <a href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections[index].id}">
+                        <a title="${connections[index].name}" href="{{route('orden.index', [null, 'maestro' => $auto->CODIGOM])}}&connection_id=${connections[index].id}">
                             ${taller.taller}
                         </a>
                     </td>

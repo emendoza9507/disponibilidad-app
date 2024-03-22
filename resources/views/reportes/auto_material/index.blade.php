@@ -56,7 +56,7 @@
                     <table class="w-full">
                         <thead class="sticky top-0 bg-gray-300">
                         <tr>
-                            <th class="text-start uppercase ">OT</th>
+                            <th class="text-start uppercase py-2    ">OT</th>
                             <th class="text-start uppercase">FECHA</th>
                             <th class="text-end uppercase">
                                 <div class="flex justify-between">
@@ -70,18 +70,24 @@
                         <tbody id="data-ordenes" >
                         @php($importe_total = 0)
                         @foreach($ordenes as $ot)
-                            <tr class="border-b-2 border-gray-300">
-                                <td class="py-2">{{$ot->CODIGOOT}}</td>
-                                <td>{{$ot->FECHACIERRE}}</td>
+                            <tr class="border-b-2 border-gray-300 hover:bg-gray-100">
+                                <td class="py-2">
+                                    <a href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
+                                        {{$ot->CODIGOOT}}
+                                    </a>
+                                </td>
+                                <td>{{\Carbon\Carbon::create($ot->FECHACIERRE)->format('d/m/Y')}}</td>
                                 <td class="flex flex-col">
+                                    @php($importe_material = 0)
                                     @foreach($ot->materials as $material)
-                                        <div class="flex justify-between">
+                                        @php($importe_material += $material->IMPORTELINEA)
+                                        <div class="flex justify-between hover:bg-gray-300">
                                             <span>{{$material->DESCRIPCION}}</span>
                                             <span>{{$material->CANTIDAD}}</span>
                                         </div>
                                     @endforeach
                                 </td>
-                                <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}</td>
+                                <td class="text-end">{{number_format($importe_material, 2)}}$</td>
                             </tr>
                         @endforeach
                         </tbody>

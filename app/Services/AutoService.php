@@ -9,6 +9,7 @@ use App\Models\Mistral\OrdenTrabajo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 class AutoService
 {
@@ -25,6 +26,18 @@ class AutoService
     public function getByMaestro(string $maestro)
     {
         return Maestro::where('CODIGOM', $maestro)->first();
+    }
+
+
+    public function getResumenFlota()
+    {
+        return Maestro::query()
+            ->select('super_maestro.MARCA','super_maestro.MODELO', DB::raw('count(*) as total'))
+            ->join('super_maestro', 'maestro.CODIGOSM', '=', 'super_maestro.CODIGOSM')
+            ->whereNotNull('MATRICULA')
+            ->whereNull('FECHABAJA')
+            ->where('MATRICULA', 'LIKE', 'T%')
+            ->groupBy('super_maestro.MARCA', 'super_maestro.MODELO');
     }
 
     public function getLastAutos(int $limit)
@@ -57,4 +70,5 @@ class AutoService
             ->orderBy('FECHACIERRE', 'DESC')
             ->get();
     }
+
 }

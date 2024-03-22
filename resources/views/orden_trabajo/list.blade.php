@@ -23,15 +23,20 @@
                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
                 <td>
-                                        <span class="px-2 select-none rounded-2xl text-white @if($ot->FECHACIERRE == null) bg-green-500 @else  bg-red-400  @endif">
-                                            {{$ot->FECHACIERRE == null ? 'abierta' : 'cerrada'}}
-                                        </span>
+                    <span class="px-2 select-none rounded-2xl text-white @if($ot->FECHACIERRE == null) bg-green-500 @else  bg-red-400  @endif">
+                        {{$ot->FECHACIERRE == null ? 'abierta' : 'cerrada'}}
+                    </span>
                 </td>
                 <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
-                <td class="px-2">
-                    <a class="flex print:hidden justify-end" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id'=>$connection_id])}}">
-                        @include('icons.settings')
-                    </a>
+                <td class="px-2 w-1">
+                    <div class="flex gap-2 items-center">
+                        <a href="{{route('reporte.auto.material', [$ot->CODIGOM, 'connection_id' => $connection_id])}}">
+                            @include('icons.box')
+                        </a>
+                        <a class="flex print:hidden justify-end" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id'=>$connection_id])}}">
+                            @include('icons.settings')
+                        </a>
+                    </div>
                 </td>
             </tr>
         @endforeach
