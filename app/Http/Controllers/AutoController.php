@@ -12,38 +12,60 @@ use App\Services\ConnectionService;
 use App\Services\OrdenTrabajoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\select;
 
 class AutoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, ConnectionService $connectionService, AutoService $autoService)
+    public function index(
+        Request $request,
+        ConnectionService $connectionService,
+        AutoService $autoService
+    )
     {
-        $connection_id = $request->query->get('connection_id',1);
-        $connection = $connectionService->setConnection($connection_id);;
-        $limit = $request->query->getInt('limit', 100);
+        $connection_id = $request->query->get('connection_id', 1);
+        $connection = $connectionService->setConnection($connection_id);
         $matricula = $request->query->get('matricula');
+        $marca = $request->query->get('marca');
+        $modelo = $request->query->get('modelo');
 
-        if(!$connection) return redirect(route('home'));
-
-        $autos = [];
-
-        if(isset($matricula)) {
-            try {
-                $autos = $autoService->getBy($matricula);
-            } catch (\Exception $exception) {
-                return redirect(route('autos.index'))->with('error', $exception->getMessage());
+        if(!$connection) {
+            if($request->ajax()) {
+                return new JsonResponse([
+                    'status' => false,
+                    'message' => 'Taller desconectado',
+                    'connection' => $connectionService->getCurrentConnection()
+                ]);
             }
-        } else {
-            $autos = $autoService->getLastAutos($limit);
+
+            self::warning('Taller desconectado ('. $connectionService->getCurrentConnection()->name.')');
+            return redirect(route('home'));
         }
 
-//        $flota = $autoService->getResumenFlota()->get();
+        if($matricula) {
+            $autos = $autoService->getBy($matricula);
+        } else {
+            $autos = $autoService->getByMarcaModelo($marca, $modelo, ['CODIGOM', 'TIPO', 'MATRICULA', 'MATRICULAANT'])->get();
+        }
 
-        return view('auto.index', compact(
-            'connection_id','autos', 'matricula'
-        ));
+        if($request->ajax()) {
+
+            return new JsonResponse([
+                'status' => true,
+                'data' => $autos
+            ]);
+
+        } else {
+            $flota = $autoService->getResumenFlota()->get();
+
+            return view('auto.index', compact(
+                'connection_id','autos', 'matricula',
+                'flota'
+            ));
+        }
+
     }
 
     /**
@@ -127,5 +149,58 @@ class AutoController extends Controller
             'connection' => $connection,
             'data' => $flota
         ]);
+    }
+
+    public function track(
+        Request $request,
+        ConnectionService $connectionService,
+        AutoService $autoService,
+        string $codigom
+    )
+    {
+        $connection_id = $request->query->get('connection_id', 1);
+        $connection = $connectionService->setConnection($connection_id);
+
+        if(!$connection) {
+            if($request->ajax()) {
+                return new JsonResponse([
+                    'status' => false,
+                    'error' => 'Taller desconectado'
+                ]);
+            }
+
+            self::warning('Taller desconectado ('. $connectionService->getCurrentConnection()->name .')');
+            return redirect(route('home'));
+        }
+
+
+        $maestro = $autoService->getByMaestro($codigom);
+
+        if(!$maestro) {
+            if($request->ajax()) {
+                return new JsonResponse([
+                    'status' =>  true,
+                    'maestro' => false,
+                    'message' => 'El auto no existe'
+                ]);
+            }
+
+            self::warning('El auto no existe');
+            return  redirect(route('autos.index'));
+        }
+
+        $ot = $autoService->getLastOpenOt($codigom);
+
+        if($request->ajax()) {
+            return new JsonResponse([
+                'status' => true,
+                'ot' => $ot,
+                'connection' => $connection
+            ]);
+        }
+
+        return view('auto.track', compact(
+            'connection_id', 'connection', 'ot', 'maestro'
+        ));
     }
 }

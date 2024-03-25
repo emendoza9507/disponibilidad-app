@@ -8,6 +8,6 @@ class AreaService
 {
     public function getAll()
     {
-        return Area::all();
+        return Area::orderBy('DESCRIPCION')->get();
     }
 }

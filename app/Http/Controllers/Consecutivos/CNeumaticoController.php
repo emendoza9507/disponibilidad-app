@@ -72,7 +72,7 @@ class CNeumaticoController extends Controller
                 if ($cantidad_neumaticos == 0) {
                     unset($ordenes[$key]);
                 } else {
-                    $orden->neumaticos = $ordenTrabajoService->getMaterialesPorTipo($orden, 'A11');
+                    $orden->neumaticos = $ordenTrabajoService->getMaterialesPorArea($orden, 'A11');
                     $orden->cant_neumaticos = $cantidad_neumaticos;
                 }
             }

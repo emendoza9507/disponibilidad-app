@@ -74,7 +74,7 @@
                                 </td>
                                 <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
-                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
+                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('d/m/Y') : ''}}</td>
                                 <td>
                                     @include('consecutivo.partials.estado')
                                 </td>
@@ -118,7 +118,7 @@
                                 </td>
                                 <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
-                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y') : ''}}</td>
+                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('d/m/Y') : ''}}</td>
                                 <td class="text-start">
                                     @include('consecutivo.partials.estado')
                                 </td>

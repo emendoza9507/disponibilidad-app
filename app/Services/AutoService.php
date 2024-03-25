@@ -41,6 +41,17 @@ class AutoService
             ->orderBy('total', 'DESC');
     }
 
+    public function getByMarcaModelo($marca, $modelo, $select = ['maestro.*'])
+    {
+        return Maestro::query()
+            ->select($select)
+            ->join('super_maestro', 'maestro.CODIGOSM', '=', 'super_maestro.CODIGOSM')
+            ->whereNotNull('MATRICULA')
+            ->whereNull('FECHABAJA')
+            ->where('super_maestro.MARCA', $marca)
+            ->where('super_maestro.MODELO', $modelo);
+    }
+
     public function getLastAutos(int $limit)
     {
         return Maestro::orderBy('FECHAALTA', 'DESC')
@@ -50,18 +61,24 @@ class AutoService
             ->limit($limit)->get();
     }
 
-    public function getOtsWithMaterialType($material, $start_date, $end_date, string $codigom = null)
+    public function getOtsWithMaterialArea($material, $start_date, $end_date, string $codigom = null)
     {
         $materiales = Material::join('orden_trabajo', function (JoinClause $join) {
             $join->on('orden_trabajo.CODIGOOT', '=', 'material.CODIGOOT');
         })
-            ->where('AREA', $material)
-            ->where('CANTIDAD', '>', 0)
-            ->select('material.CODIGOOT');
+            ->select('material.CODIGOOT')
+            ->where('CANTIDAD', '>', 0);
+
+        if($material != '*') {
+            $materiales = $materiales
+                ->where('AREA', $material);
+        }
 
         return OrdenTrabajo::whereIn('CODIGOOT', $materiales)
             ->with('materials',  function ($query) use ($material) {
-                $query->where('AREA', $material);
+                if($material != '*') {
+                    $query->where('AREA', $material);
+                }
             })
             ->whereNotNull('FECHACIERRE')
             ->when($codigom, function (Builder $query, string $codigom) {
@@ -70,6 +87,14 @@ class AutoService
             ->whereBetween('FECHACIERRE', [$start_date, $end_date])
             ->orderBy('FECHACIERRE', 'DESC')
             ->get();
+    }
+
+    public function getLastOpenOt(string $codigom)
+    {
+        return OrdenTrabajo::where('CODIGOM', $codigom)
+            ->whereNull('FECHACIERRE')
+            ->orderBy('FECHAENTRADA', 'DESC')
+            ->first();
     }
 
 }

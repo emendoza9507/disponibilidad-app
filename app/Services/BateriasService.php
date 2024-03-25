@@ -33,7 +33,7 @@ class BateriasService
 
     public function getCantidadBateriasCargadas(OrdenTrabajo $ot)
     {
-        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A10');
+        $materiales = $this->ordenTrabajoService->getMaterialesPorArea($ot,'A10');
         $cantidad = 0;
 
         foreach ($materiales as $material) {
@@ -45,7 +45,7 @@ class BateriasService
 
     public function generarConsecutivosDeBaterias(OrdenTrabajo $ot)
     {
-        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A10');
+        $materiales = $this->ordenTrabajoService->getMaterialesPorArea($ot,'A10');
         $baterias = count($this->getByCodigoOt($ot));
         $bateriasCargadas = $this->getCantidadBateriasCargadas($ot);;
 

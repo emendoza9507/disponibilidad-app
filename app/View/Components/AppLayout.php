@@ -28,7 +28,7 @@ class AppLayout extends Component
             ],
             (object) [
                 'label' => 'Consecutivos',
-                'icon' => 'report',
+                'icon' => 'consecutive',
                 'dropdown' => [
                     (object) [
                         'label' => 'Baterias',
@@ -87,7 +87,7 @@ class AppLayout extends Component
             ],
             (object) [
                 'label' => 'Configuracion',
-                'icon' => 'report',
+                'icon' => 'settings',
                 'can' => 'admin.app',
                 'dropdown' => [
                     (object) [

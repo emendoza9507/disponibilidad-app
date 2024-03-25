@@ -129,7 +129,7 @@ class OrdenTrabajoService
         return false;
     }
 
-    public function getMaterialesPorTipo(OrdenTrabajo $ot, string $area)
+    public function getMaterialesPorArea(OrdenTrabajo $ot, string $area)
     {
         $materiales = [];
         foreach ($ot->materials as $material) {

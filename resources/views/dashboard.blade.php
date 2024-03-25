@@ -241,6 +241,8 @@
 
     class ConnectionStateLoader extends HTMLTableElement {
 
+        _eventListeners = new EventListener();
+
         _tbody = null;
 
         get tbody() {
@@ -257,37 +259,60 @@
         }
 
         connectedCallback() {
+            const check = document.createElement('span');
+            check.classList.add('px-2','py-0','ms-2', 'bg-gray-300', 'text-sm', 'rounded-full', 'text-white', 'font-bold');
+            check.style.fontSize = '12px'
+
             connections.forEach(({id, name, codigo_taller}) => {
-                axios.get(`{{route('connections.check')}}?connection_id=${id}`)
-                    .then(({data}) => {
-                        const tr = document.createElement('tr');
+                const tr = document.createElement('tr');
 
-                        [
-                            (td) => {
-                                td.append(name)
-                            },
-                            (td) => {
-                                td.append(codigo_taller)
+                [
+                    (td) => {
+                        const span = document.createElement('span')
+                        span.append(name)
+                        const local_check = check.cloneNode(true)
+                        local_check.append('conectando')
 
-                                if(data.status) {
-                                    td.classList.add('text-green-400')
-                                }
+                        this._eventListeners.on(id, (status) => {
+                            if(status) {
+                                local_check.remove()
+                            } else {
+                                local_check.classList.remove('bg-gray-300')
+                                local_check.classList.add('bg-red-400')
+                                local_check.innerHTML = 'desconectado'
                             }
-                        ].forEach(callback => {
-                            const td = document.createElement('td');
-
-                            callback(td);
-
-                            td.classList.add('font-bold')
-
-                            if(!data.status) {
-                                td.classList.add('text-red-300')
-                            }
-
-                            tr.append(td)
                         })
 
-                        this.tbody.append(tr);
+                        td.append(span)
+                        td.append(local_check)
+                    },
+                    (td) => {
+                        td.append(codigo_taller)
+
+                        this._eventListeners.on(id, (status) => {
+                            if(status) {
+                                td.classList.add('text-green-400')
+                            } else {
+                                td.classList.add('text-red-300')
+                            }
+                        })
+                    }
+                ].forEach(callback => {
+                    const td = document.createElement('td');
+
+                    callback(td);
+
+                    td.classList.add('font-bold')
+
+                    tr.append(td)
+                })
+
+                this.tbody.append(tr);
+
+
+                axios.get(`{{route('connections.check')}}?connection_id=${id}`)
+                    .then(({data}) => {
+                        this._eventListeners.dispatch(id, data.status)
                     })
                     .catch(() => {
                         console.log('asd')

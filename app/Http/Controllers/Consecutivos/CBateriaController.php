@@ -68,7 +68,7 @@ class CBateriaController extends Controller
                 if($cant_baterias == 0) {
                     unset($ordenes[$key]);
                 } else {
-                    $orden->baterias = $ordenTrabajoService->getMaterialesPorTipo($orden, 'A10');
+                    $orden->baterias = $ordenTrabajoService->getMaterialesPorArea($orden, 'A10');
                     $orden->cant_baterias = $cant_baterias;
                 }
             }

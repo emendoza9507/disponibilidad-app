@@ -38,54 +38,34 @@
 
                 <br>
 
-                <div style="max-height: 400px" class="relative overflow-y-auto">
+                <div style="max-height: 400px" class="relative overflow-y-auto overflow-x-hidden">
                     <table class="w-full relative">
                         <thead class="sticky top-0 bg-white">
                         <tr class="uppercase">
-                            <th class="px-1">#</th>
                             <th class="px-4">Matricula</th>
                             <th class="px-4">Tipo</th>
                             <th class="px-4">Marca</th>
                             <th class="px-4">Modelo</th>
-                            <th class="px-4">Num. Motor</th>
                             <th class="px-4">Mat. Anterior</th>
                             <th colspan="2"></th>
                         </tr>
-                        </thead>
                         <tbody id="data-autos">
-                        @foreach($autos as $auto)
-                            <tr class="hover:bg-gray-300">
-                                <td class="px-1 py-2 text-center">{{$loop->index + 1}}</td>
-                                <td class="px-4 text-center">{{$auto->MATRICULA}}</td>
-                                <td class="px-4 text-center">{{$auto->supermaestro?->TIPO}}</td>
-                                <td class="px-4 text-center">{{$auto->supermaestro?->MARCA}}</td>
-                                <td class="px-4 text-center">{{$auto->supermaestro?->MODELO}}</td>
-                                <td class="px-4 text-center">{{$auto->NOMOTOR}}</td>
-                                <td class="px-4 text-center">{{$auto->MATRICULAANT}}</td>
-                                <td class="flex gap-2">
-                                    <a title="Consumo" href="{{route('reporte.auto.material', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
-                                        @include('icons.box')
-                                    </a>
-                                    <a title="Ordenes de Trabajo" href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
-                                        @include('icons.documents')
-                                    </a>
-                                </td>
-                                <td></td>
-                            </tr>
-                        @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
+        <span class="hover:font-bold hover:underline top-5 z-10"></span>
     </x-container>
 </x-app-layout>
 <script>
     const $inputSearh = document.querySelector('#input-search');
-    const $dataNeumaticos = document.querySelector('#data-autos');
+    const $data = document.querySelector('#data-autos');
 
     $inputSearh.addEventListener('keyup', () => {
-        Array.from($dataNeumaticos.children).forEach(($tr => {
+        Array.from($data.children).forEach(($tr => {
+            if($tr.classList.contains('header')) return
             if($tr.innerText.toLowerCase().includes($inputSearh.value.toString().trim().toLowerCase())) {
                 $tr.classList.remove('hidden')
             } else {
@@ -93,4 +73,114 @@
             }
         }))
     })
+
+    let flota = @json($flota);
+
+    @if(!$matricula)
+
+        function getLoteAndRender(lote, index) {
+            if(!lote) return
+            axios
+                .get(location.href, { params: { marca: lote.MARCA, modelo: lote.MODELO, connection_id: {{$connection_id}} } })
+                .then(({data}) => data)
+                .then(({status, data}) => {
+                    const tr = document.getElementById(`${lote.MARCA}${lote.MODELO}`);
+                    const fragment = document.createDocumentFragment();
+
+                    const trHeader = document.createElement('tr');
+                    const tdMarcaModelo = document.createElement('td');
+                    tdMarcaModelo.classList.add('text-center','bg-gray-300', 'cursor-pointer')
+                    tdMarcaModelo.innerHTML = `${lote.MARCA}  ${lote.MODELO}`;
+
+                    const tdSeparador = document.createElement('td');
+                    tdSeparador.colSpan = 4;
+                    tdSeparador.classList.add('border-b-2', 'text-end')
+
+                    const tdTotalAutos = document.createElement('td');
+                    tdTotalAutos.append(data.length);
+                    tdTotalAutos.classList.add('text-center', 'border-b-2')
+
+                    trHeader.classList.add('header', 'bg-gray-50', 'hover:bg-gray-100', 'sticky', 'top-5')
+                    trHeader.append(tdMarcaModelo, tdSeparador, tdTotalAutos);
+                    fragment.append(trHeader);
+
+                    const rows = []
+                    let showFlag = true
+
+                    tdMarcaModelo.addEventListener('click', () => {
+                        showFlag = !showFlag
+                        rows.forEach(tr => {
+                            if(!showFlag) {
+                                tr.hidden = true
+                            } else {
+                                tr.removeAttribute('hidden')
+                            }
+                        })
+                    })
+
+                    Array.from(data).forEach(auto => {
+                        const autoRow = document.createElement('tr');
+                        rows.push(autoRow);
+                        [
+                            (td) => {
+                                td.append(auto.MATRICULA)
+                            },
+                            (td) => {
+                                td.append(auto.TIPO)
+                            },
+                            (td) => {
+                                td.append(lote.MARCA)
+                            },
+                            (td) => {
+                                td.append(lote.MODELO)
+                            },
+                            (td) => {
+                                td.append(auto.MATRICULAANT ? auto.MATRICULAANT : '' )
+                            },
+                            (td) => {
+
+                                td.innerHTML = `
+                                <div class="flex justify-center">
+                                    <a title="Ordenes de Trabajo" href="${location.pathname}/${auto.CODIGOM}/track${location.search}">
+                                        @include('icons.location')
+                                    </a>
+                                    <a title="Ordenes de Trabajo" href="${location.pathname}/${auto.CODIGOM}${location.search}">
+                                        @include('icons.documents')
+                                    </a>
+                                </div>
+                                `
+                            }
+                        ].forEach(callback => {
+                            const td = document.createElement('td')
+                            td.classList.add('text-center')
+                            callback(td)
+                            autoRow.append(td)
+                        })
+                        fragment.append(autoRow);
+                    });
+                    $data.replaceChild(fragment, tr)
+                })
+        }
+
+        flota.forEach((lote, index) => {
+            const tr = document.createElement('tr')
+            tr.id = `${lote.MARCA}${lote.MODELO}`;
+            const td = document.createElement('td')
+            td.colSpan = 6;
+            td.classList.add('text-center','text-red-300', 'cursor-pointer');
+            td.innerHTML = `Cargar lote ${lote.MARCA} ${lote.MODELO}`;
+
+
+            tr.classList.add('hover:bg-gray-100', 'hover:font-bold', 'hover:underline')
+            tr.append(td);
+            $data.append(tr)
+
+            td.onclick = () => {
+                td.onclick = null;
+                getLoteAndRender(lote, index)
+            }
+        })
+
+        // getLoteAndRender(flota[0], 0)
+    @endif
 </script>

@@ -31,9 +31,9 @@
                             <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date?->format('Y-m-d')}}"/>
 
                             <select id="select-connection" name="connection_id" is="select-connection" class="print:hidden">
-                                @foreach($connections as $connection)
-                                    <option value="{{$connection->id}}" @if($connection->id == $connection_id) selected @endif>
-                                        {{$connection->name}}
+                                @foreach($connections as $con)
+                                    <option value="{{$con->id}}" @if($con->id == $connection_id) selected @endif>
+                                        {{$con->name}}
                                     </option>
                                 @endforeach
                             </select>
@@ -42,6 +42,7 @@
                         </div>
 
                         <select name="area" >
+                            <option value="*">TODAS</option>
                             @foreach($areas as $a)
                                 <option @selected($area == $a->CODIGO) value="{{$a->CODIGO}}">{{$a->DESCRIPCION}}</option>
                             @endforeach
@@ -68,28 +69,7 @@
                         </tr>
                         </thead>
                         <tbody id="data-ordenes" >
-                        @php($importe_total = 0)
-                        @foreach($ordenes as $ot)
-                            <tr class="border-b-2 border-gray-300 hover:bg-gray-100">
-                                <td class="py-2">
-                                    <a href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
-                                        {{$ot->CODIGOOT}}
-                                    </a>
-                                </td>
-                                <td>{{\Carbon\Carbon::create($ot->FECHACIERRE)->format('d/m/Y')}}</td>
-                                <td class="flex flex-col">
-                                    @php($importe_material = 0)
-                                    @foreach($ot->materials as $material)
-                                        @php($importe_material += $material->IMPORTELINEA)
-                                        <div class="flex justify-between hover:bg-gray-300">
-                                            <span>{{$material->DESCRIPCION}}</span>
-                                            <span>{{$material->CANTIDAD}}</span>
-                                        </div>
-                                    @endforeach
-                                </td>
-                                <td class="text-end">{{number_format($importe_material, 2)}}$</td>
-                            </tr>
-                        @endforeach
+                            @include('reportes.auto_material.partials.rows')
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-gray-300">
 
@@ -120,10 +100,12 @@
 </x-app-layout>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
+        const $selectConnection = document.querySelector('#select-connection')
         const $inputSearh = document.querySelector('#input-search');
         const $data = document.querySelector('#data-ordenes');
         const $btnPrint = document.querySelector('#btn-print');
         const $areaPrint = document.querySelector('#reporte');
+
 
         reportPrint($btnPrint, $areaPrint, ($printer) => {
             const $classes = ['border-gray-300', 'bg-gray-300', 'border-2']
@@ -142,5 +124,31 @@
                 }
             }))
         })
+
+        connections.filter(c => c.id !== {{$connection_id}}).forEach(connection => {
+
+            const tr = document.createElement('tr')
+            tr.id = connection.id
+            tr.innerHTML = `<td colspan="4" class="text-red-400 text-center">Cargando datos de ${connection.name}...</td>`
+            $data.append(tr)
+
+            axios
+                .get(location.href, {
+                    params: { connection_id: connection.id }
+                })
+                .then(({data}) => data)
+                .then(({status, html}) => {
+                    if(status) {
+                        $data.innerHTML += html
+                    } else {
+
+                    }
+                })
+                .catch(err => console.log(err.message))
+                .finally(() => {
+                    $data.removeChild(document.getElementById(connection.id))
+                })
+        })
+
     })
 </script>

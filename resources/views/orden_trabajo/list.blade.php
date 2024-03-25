@@ -30,7 +30,7 @@
                 <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
                 <td class="px-2 w-1">
                     <div class="flex gap-2 items-center">
-                        <a href="{{route('reporte.auto.material', [$ot->CODIGOM, 'connection_id' => $connection_id])}}">
+                        <a href="{{route('reporte.auto.material', [$ot->CODIGOM, 'connection_id' => $connection_id, 'start_date' => $ot->FECHAENTRADA])}}">
                             @include('icons.box')
                         </a>
                         <a class="flex print:hidden justify-end" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id'=>$connection_id])}}">

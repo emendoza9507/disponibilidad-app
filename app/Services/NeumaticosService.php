@@ -98,11 +98,13 @@ class NeumaticosService
 
     public function getCantidadNeumaticosCargados(OrdenTrabajo $ot)
     {
-        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A11');
+        $materiales = $this->ordenTrabajoService->getMaterialesPorArea($ot,'A11');
         $cantidad = 0;
 
         foreach ($materiales as $material) {
-            $cantidad += $material->CANTIDAD;
+            if(str_contains($material->DESCRIPCION, 'NEUM')) {
+                $cantidad += $material->CANTIDAD;
+            }
         }
 
         return $cantidad;
@@ -110,7 +112,7 @@ class NeumaticosService
 
     public function generarConsecutivosDeNeumaticos(OrdenTrabajo $ot)
     {
-        $materiales = $this->ordenTrabajoService->getMaterialesPorTipo($ot,'A11');
+        $materiales = $this->ordenTrabajoService->getMaterialesPorArea($ot,'A11');
         $neumaticos = count($this->getByCodigoOt($ot));
         $neumaticosCargados = $this->getCantidadNeumaticosCargados($ot);
 
