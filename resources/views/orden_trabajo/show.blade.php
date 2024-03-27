@@ -18,7 +18,7 @@
                         <div class="flex flex-col">
                             <div class="flex print:hidden text-xl justify-between">
                                 <h3 class="font-bold">OT:</h3>
-                                <span>{{$ot->CODIGOOT}}</span>
+                                <span>({{$connection->name}}) {{$ot->CODIGOOT}}</span>
                             </div>
 
                             <div class="flex text-xl justify-between">

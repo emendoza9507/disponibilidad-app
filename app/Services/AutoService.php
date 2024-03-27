@@ -89,10 +89,9 @@ class AutoService
             ->get();
     }
 
-    public function getLastOpenOt(string $codigom)
+    public function getLastOt(string $codigom)
     {
         return OrdenTrabajo::where('CODIGOM', $codigom)
-            ->whereNull('FECHACIERRE')
             ->orderBy('FECHAENTRADA', 'DESC')
             ->first();
     }

@@ -50,7 +50,7 @@ class OrdenTrabajoController extends Controller
         $ot = $ordenTrabajoService->get($codigoot);
 
         return view('orden_trabajo.show', compact(
-              'ot', 'connection_id'
+              'ot', 'connection_id', 'connection'
         ));
     }
 }

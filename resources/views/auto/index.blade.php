@@ -50,6 +50,27 @@
                             <th colspan="2"></th>
                         </tr>
                         <tbody id="data-autos">
+                        @foreach($autos as $auto)
+                            <td class="text-center">
+                                <a href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                    {{$auto->MATRICULA}}
+                                </a>
+                            </td>
+                            <td class="text-center">{{$auto->supermaestro->TIPO}}</td>
+                            <td class="text-center">{{$auto->supermaestro->MARCA}}</td>
+                            <td class="text-center">{{$auto->supermaestro->MODELO}}</td>
+                            <td class="text-center">{{$auto->MATRICULAANT}}</td>
+                            <td class="text-center">
+                                <div class="flex justify-center">
+                                    <a title="Ordenes de Trabajo" href="{{route('auto.track', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                        @include('icons.location')
+                                    </a>
+                                    <a title="Ordenes de Trabajo" href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                        @include('icons.documents')
+                                    </a>
+                                </div>
+                            </td>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -123,7 +144,11 @@
                         rows.push(autoRow);
                         [
                             (td) => {
-                                td.append(auto.MATRICULA)
+                                td.innerHTML = `
+                                    <a href="${location.pathname}/${auto.CODIGOM}${location.search}">
+                                        ${auto.MATRICULA}
+                                    </a>
+                                `
                             },
                             (td) => {
                                 td.append(auto.TIPO)
@@ -138,7 +163,6 @@
                                 td.append(auto.MATRICULAANT ? auto.MATRICULAANT : '' )
                             },
                             (td) => {
-
                                 td.innerHTML = `
                                 <div class="flex justify-center">
                                     <a title="Ordenes de Trabajo" href="${location.pathname}/${auto.CODIGOM}/track${location.search}">
@@ -177,7 +201,13 @@
 
             td.onclick = () => {
                 td.onclick = null;
-                getLoteAndRender(lote, index)
+                td.innerHTML = 'Cargando lote porfavor estere...'
+                td.classList.remove('text-red-300')
+                td.classList.add('text-green-400')
+
+                setTimeout(() => {
+                    getLoteAndRender(lote, index)
+                }, 1000)
             }
         })
 

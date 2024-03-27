@@ -189,7 +189,7 @@ class AutoController extends Controller
             return  redirect(route('autos.index'));
         }
 
-        $ot = $autoService->getLastOpenOt($codigom);
+        $ot = $autoService->getLastOt($codigom);
 
         if($request->ajax()) {
             return new JsonResponse([
