@@ -181,7 +181,7 @@
                                    {{$consecutivo->TALLER}}
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{route('consecutivo.neumatico.show', $consecutivo->id)}}">
+                                    <a href="{{route('consecutivo.neumatico.show', [$consecutivo->id, 'connection_id' => $connection_id])}}">
                                         {{$fecha->format('y')}}{{$consecutivo->id}}
                                     </a>
                                 </td>

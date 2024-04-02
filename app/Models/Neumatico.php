@@ -22,11 +22,11 @@ class Neumatico extends Model
     }
 
     public function consecutivo() {
-        return $this->created_at->format('y') . $this->id;
+        return $this->id;
     }
 
     public function anterior()
     {
-        return $this->neumatico_anterior ? $this->created_at->format('y') . $this->neumatico_anterior : null;
+        return $this->neumatico_anterior ?  $this->neumatico_anterior : null;
     }
 }

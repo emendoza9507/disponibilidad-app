@@ -85,6 +85,7 @@ Route::middleware([
                 Route::name('neumatico.json_all')->get('/json_all', 'jsonAll');
                 Route::name('neumatico.show')->get('/{neumatico}', 'show');
                 Route::name('neumatico.edit')->get('/{neumatico}/edit', 'edit');
+                Route::name('neumatico.update')->put('/{neumatico}', 'update');
                 Route::name('neumatico.show_maestro')->get('/maestro/{maestro}', 'showMaestro');
                 Route::name('neumatico.json_last_ot_with_neumatico')->get('/maestro/{maestro}/last', 'jsonUltimaOTConNeumaticos');
            });

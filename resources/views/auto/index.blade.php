@@ -51,25 +51,27 @@
                         </tr>
                         <tbody id="data-autos">
                         @foreach($autos as $auto)
-                            <td class="text-center">
-                                <a href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
-                                    {{$auto->MATRICULA}}
-                                </a>
-                            </td>
-                            <td class="text-center">{{$auto->supermaestro->TIPO}}</td>
-                            <td class="text-center">{{$auto->supermaestro->MARCA}}</td>
-                            <td class="text-center">{{$auto->supermaestro->MODELO}}</td>
-                            <td class="text-center">{{$auto->MATRICULAANT}}</td>
-                            <td class="text-center">
-                                <div class="flex justify-center">
-                                    <a title="Ordenes de Trabajo" href="{{route('auto.track', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
-                                        @include('icons.location')
+                            <tr>
+                                <td class="text-center">
+                                    <a href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                        {{$auto->MATRICULA}}
                                     </a>
-                                    <a title="Ordenes de Trabajo" href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
-                                        @include('icons.documents')
-                                    </a>
-                                </div>
-                            </td>
+                                </td>
+                                <td class="text-center">{{$auto->supermaestro->TIPO}}</td>
+                                <td class="text-center">{{$auto->supermaestro->MARCA}}</td>
+                                <td class="text-center">{{$auto->supermaestro->MODELO}}</td>
+                                <td class="text-center">{{$auto->MATRICULAANT}}</td>
+                                <td class="text-center">
+                                    <div class="flex justify-center">
+                                        <a title="Ordenes de Trabajo" href="{{route('auto.track', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                            @include('icons.location')
+                                        </a>
+                                        <a title="Ordenes de Trabajo" href="{{route('autos.show', [$auto->CODIGOM, 'connection_id' => $connection_id])}}">
+                                            @include('icons.documents')
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                     </table>

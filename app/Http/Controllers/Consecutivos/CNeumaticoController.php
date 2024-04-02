@@ -22,7 +22,7 @@ class CNeumaticoController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission.taller:tecnico')->only('store');
+        $this->middleware('permission.taller:tecnico')->only('store', 'edit', 'update');
     }
 
     //
@@ -136,18 +136,32 @@ class CNeumaticoController extends Controller
         return new JsonResponse(Neumatico::where('id', 'LIKE', '%'.$query.'%')->get());
     }
 
-    public function show(Neumatico $neumatico)
+    public function show(Request $request, Neumatico $neumatico)
     {
+        $connection_id = $request->query->get('connection_id');
         return view('consecutivo.neumatico.show', compact(
-            'neumatico'
+            'neumatico', 'connection_id'
         ));
     }
 
-    public function edit(Neumatico $neumatico)
+    public function edit(Request $request, Neumatico $neumatico)
     {
+        $connection_id = $request->query->get('connection_id');
         return view('consecutivo.neumatico.edit', compact(
-            'neumatico'
+            'neumatico', 'connection_id'
         ));
+    }
+
+    public function update(Request $request, Neumatico $neumatico)
+    {
+        $request->validate([
+            'anterior' => 'exists:neumaticos,id|nullable',
+            'cons_manual' => 'unique:neumaticos,cons_manual|nullable'
+        ]);
+
+        var_dump($neumatico);
+
+        return "Actualizando neumatico";
     }
 
     public function showMaestro(Request $request, string $maestro, ConnectionService
