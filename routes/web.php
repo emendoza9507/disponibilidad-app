@@ -95,6 +95,7 @@ Route::middleware([
                 Route::name('bateria.all')->get('/all', 'all');
                 Route::name('bateria.show')->get('/{bateria}', 'show');
                 Route::name('bateria.edit')->get('/{bateria}/edit', 'edit');
+                Route::name('bateria.update')->put('/{bateria}', 'update');
                 Route::name('bateria.show_maestro')->get('/maestro/{maestro}', 'showMaestro');
                 Route::name('bateria.json_last_ot_with_bateria')->get('/maestro/{maestro}/last', 'jsonUltimaOTConNeumaticos');
             });

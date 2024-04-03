@@ -22,7 +22,11 @@ class Bateria extends Model
     }
 
     public function consecutivo() {
-        return $this->created_at->format('y') . $this->id;
+        if($this->id > 9999) {
+            return substr((string) $this->id, strlen((string) $this->id) - 4);
+        }
+
+        return $this->id;
     }
 
     public function anterior()

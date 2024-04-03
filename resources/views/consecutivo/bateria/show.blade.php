@@ -40,7 +40,10 @@
                             <b class="relative left-10">TALLER:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$bateria->TALLER}}</span>
+                            <span class="relative right-10">
+                                {{$bateria->TALLER}}
+                                <bold class="font-bold">({{$bateria->connection->name}})</bold>
+                            </span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -71,13 +74,13 @@
                             <span class="relative right-10">{{$bateria->created_at->format('d/m/Y')}}</span>
                         </div>
                     </div>
-                    @if($neumatico->cons_manual)
+                    @if($bateria->cons_manual)
                         <div class="grid grid-cols-2">
                             <div>
                                 <b class="relative left-10">CONSECUTIVO MANUAL:</b>
                             </div>
                             <div class="text-end">
-                                <span class="relative right-10">{{$neumatico->cons_manual}}</span>
+                                <span class="relative right-10">{{$bateria->cons_manual}}</span>
                             </div>
                         </div>
                     @endif

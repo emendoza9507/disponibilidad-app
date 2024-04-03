@@ -62,7 +62,6 @@
                         <tbody id="data-ordenes">
                         @php($importe_total = 0)
                         @php($total_neumaticos = 0)
-                        @role($connection_id, 'tecnico')
                         @foreach($ordenes as $ot)
                             @php($importe_total += $ot->IMPORTESERVICIO)
                             @php($total_neumaticos += $ot->cant_neumaticos)
@@ -80,6 +79,7 @@
                                 </td>
                                 <td>
                                     @if($ot->consecutivoNeumaticos->count() == 0)
+                                        @role($connection_id, 'tecnico')
                                         <div class="flex">
                                             <form
                                                 action="{{route('consecutivo.neumatico.store', [null, 'connection_id' => $connection_id])}}"
@@ -92,6 +92,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        @endrole
                                     @else
                                         <div class="flex gap-2" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')" >
                                             @foreach($ot->consecutivoNeumaticos as $consecutivo)
@@ -106,42 +107,6 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @elserole
-                        @foreach($ordenes as $ot)
-                            @php($importe_total += $ot->IMPORTESERVICIO)
-                            @php($total_neumaticos += $ot->cant_neumaticos)
-                            <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
-                                <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
-                                        {{$ot->CODIGOOT}}
-                                    </a>
-                                </td>
-                                <td><a href="{{route('consecutivo.neumatico.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
-                                <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
-                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHASALIDA)->format('d/m/Y') : ''}}</td>
-                                <td class="text-start">
-                                    @include('consecutivo.partials.estado')
-                                </td>
-                                <td>
-                                    @if($ot->consecutivoNeumaticos->count() == 0)
-                                        <div class="flex">
-
-                                        </div>
-                                    @else
-                                        <div class="flex gap-2" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')" >
-                                            @foreach($ot->consecutivoNeumaticos as $consecutivo)
-                                                <span class="border-2 py-0.5 px-2 text-white font-bold bg-gray-500 border-green-500">{{$consecutivo->id}}</span>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </td>
-                                <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
-                                <td class="px-3 text-end">
-                                    {{$ot->cant_neumaticos}}
-                                </td>
-                            </tr>
-                        @endforeach
-                        @endrole
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-white">
                         <tr>
@@ -182,7 +147,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="{{route('consecutivo.neumatico.show', [$consecutivo->id, 'connection_id' => $connection_id])}}">
-                                        {{$fecha->format('y')}}{{$consecutivo->id}}
+                                        {{$consecutivo->consecutivo()}}
                                     </a>
                                 </td>
                                 <td class="text-end">

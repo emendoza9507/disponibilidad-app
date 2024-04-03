@@ -22,6 +22,10 @@ class Neumatico extends Model
     }
 
     public function consecutivo() {
+        if($this->id > 9999) {
+            return substr((string) $this->id, strlen((string) $this->id) - 4);
+        }
+
         return $this->id;
     }
 

@@ -7,6 +7,7 @@ use App\Models\Bateria;
 use App\Models\Connection;
 use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
+use App\Models\Neumatico;
 use App\Services\AutoService;
 use App\Services\BateriasService;
 use App\Services\ConnectionService;
@@ -22,7 +23,7 @@ class CBateriaController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission.taller:tecnico')->only('store');
+        $this->middleware('permission.taller:tecnico')->only('store', 'edit', 'update');
     }
 
     public function index(
@@ -128,11 +129,29 @@ class CBateriaController extends Controller
         ));
     }
 
-    public function edit(Bateria $bateria)
+    public function edit(Request $request, Bateria $bateria)
     {
+        $connection_id = $request->query->get('connection_id');
         return view('consecutivo.bateria.edit', compact(
-            'bateria'
+            'bateria', 'connection_id'
         ));
+    }
+
+    public function update(Request $request, Bateria $bateria)
+    {
+        $connection_id = $request->query->get('connection_id');
+        $validated = $request->validate([
+            'anterior' => 'exists:neumaticos,id|nullable',
+            'cons_manual' => 'unique:neumaticos,cons_manual|nullable'
+        ]);
+
+        $bateria->neumatico_anterior = $validated['anterior'];
+        $bateria->cons_manual = $validated['cons_manual'];
+
+        $bateria->save();
+
+        self::success('Consecutivo guardado satisfactoriamente');
+        return redirect(route('consecutivo.bateria.show', [$bateria->id, 'connection_id' => $connection_id]));
     }
 
     public function showMaestro(Request $request, string $maestro, ConnectionService

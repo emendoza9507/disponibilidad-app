@@ -41,7 +41,10 @@
                             <b class="relative left-10">TALLER:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$neumatico->TALLER}}</span>
+                            <span class="relative right-10" title="">
+                                {{$neumatico->TALLER}}
+                                <bold class="font-bold">({{$neumatico->connection->name}})</bold>
+                            </span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">

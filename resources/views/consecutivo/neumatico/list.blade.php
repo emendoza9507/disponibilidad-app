@@ -49,7 +49,7 @@
                             <tr class="text-start hover:bg-gray-300">
                                 <td class="text-start py-2">
                                     <a href="{{route('consecutivo.neumatico.show', $consecutivo->id)}}">
-                                    {{$fecha->format('y')}}{{$consecutivo->id}}
+                                    {{$consecutivo->id}}
                                     </a>
                                 </td>
                                 <td class="text-start">
@@ -58,7 +58,9 @@
                                     </a>
                                 </td>
                                 <td class="pl-2">
-                                   {{$consecutivo->TALLER}}
+                                    <span title="{{$consecutivo->connection->name}}">
+                                        {{$consecutivo->TALLER}}
+                                    </span>
                                 </td>
                                 <td class="text-end">
                                     {{$fecha->format('d/m/Y')}}

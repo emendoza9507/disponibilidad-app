@@ -118,6 +118,7 @@ class CNeumaticoController extends Controller
                 ->orWhere('TALLER', 'LIKE', '%' . $query . '%')
                 ->orWhere('id', 'LIKE', substr($query, 2))
                 ->orderBy('id', 'desc')
+                ->with('connection')
                 ->paginate($show)
                 ->withQueryString();
         } else {
@@ -154,14 +155,19 @@ class CNeumaticoController extends Controller
 
     public function update(Request $request, Neumatico $neumatico)
     {
-        $request->validate([
+        $connection_id = $request->query->get('connection_id');
+        $validated = $request->validate([
             'anterior' => 'exists:neumaticos,id|nullable',
             'cons_manual' => 'unique:neumaticos,cons_manual|nullable'
         ]);
 
-        var_dump($neumatico);
+        $neumatico->neumatico_anterior = $validated['anterior'];
+        $neumatico->cons_manual = $validated['cons_manual'];
 
-        return "Actualizando neumatico";
+        $neumatico->save();
+
+        self::success('Consecutivo guardado satisfactoriamente');
+        return redirect(route('consecutivo.neumatico.show', [$neumatico->id, 'connection_id' => $connection_id]));
     }
 
     public function showMaestro(Request $request, string $maestro, ConnectionService

@@ -11,8 +11,9 @@
         @include('partials.messages')
 
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <form  id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
-
+            <form action="{{route('consecutivo.bateria.update', [$bateria->id, 'connection_id' => $connection_id])}}" method="POST" id="reporte-neumatico" class="p-6 lg:p-8 bg-white">
+                @csrf
+                @method('PUT')
 
                 <div class="mt-3 text-center">
                     <h3 class="text-xl uppercase font-bold inline-block right-2 relative">BATERIA</h3>
@@ -32,7 +33,7 @@
                             <b class="relative left-10">CONSECUTIVO ANTERIOR:</b>
                         </div>
                         <div class="text-end">
-                            <x-input name="anterior" value="{{old('anterior')}}"/>
+                            <x-input @class(['relative right-10 text-end', 'border-2 border-red-300' => $errors->has('anterior')]) name="anterior" value="{{old('anterior')}}"/>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -40,7 +41,10 @@
                             <b class="relative left-10">TALLER:</b>
                         </div>
                         <div class="text-end">
-                            <span class="relative right-10">{{$bateria->TALLER}}</span>
+                            <span class="relative right-10" title="">
+                                {{$bateria->TALLER}}
+                                <bold class="font-bold">({{$bateria->connection->name}})</bold>
+                            </span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2">
@@ -71,16 +75,14 @@
                             <span class="relative right-10">{{$bateria->created_at->format('d/m/Y')}}</span>
                         </div>
                     </div>
-                    @if($neumatico->cons_manual)
-                        <div class="grid grid-cols-2">
-                            <div>
-                                <b class="relative left-10">CONSECUTIVO MANUAL:</b>
-                            </div>
-                            <div class="text-end">
-                                <span class="relative right-10">{{$neumatico->cons_manual}}</span>
-                            </div>
+                    <div class="grid grid-cols-2 items-center">
+                        <div>
+                            <b class="relative left-10">CONSECUTIVO MANUAL:</b>
                         </div>
-                    @endif
+                        <div class="text-end">
+                            <x-input @class(['relative right-10 text-end', 'border-2 border-red-300' => $errors->has('cons_manual')]) name="cons_manual" value="{{old('cons_manual')}}"/>
+                        </div>
+                    </div>
                     @if($bateria->OBSERVACIONES)
                         <div class="grid grid-cols-2">
                             <div>

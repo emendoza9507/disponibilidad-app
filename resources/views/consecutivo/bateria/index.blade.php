@@ -58,44 +58,7 @@
                         <tbody id="data-ordenes" >
                         @php($importe_total = 0)
                         @php($total_baterias = 0)
-                        @role($connection_id, 'tecnico')
-                        @foreach($ordenes as $ot)
-                            @php($importe_total += $ot->IMPORTESERVICIO)
-                            @php($total_baterias += $ot->cant_baterias)
-                            <tr class="hover:bg-gray-100" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')">
-                                <td class="py-3 text-start">
-                                    <a class="" href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">
-                                        {{$ot->CODIGOOT}}
-                                    </a>
-                                </td>
-                                <td><a href="{{route('consecutivo.bateria.show_maestro', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
-                                <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
-                                <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
-                                <td>
-                                    @include('consecutivo.partials.estado')
-                                </td>
-                                <td>
-                                    @if($ot->consecutivoBaterias->count() == 0)
-                                        <form action="{{route('consecutivo.bateria.store', [null, 'connection_id' => $connection_id])}}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
-                                            <button class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">GENERAR</button>
-                                        </form>
-                                    @else
-                                        <div class="flex gap-2">
-                                            @foreach($ot->consecutivoBaterias as $consecutivo)
-                                                <span class="border-2 py-0.5 px-2 text-white font-bold bg-gray-500 border-green-500">{{$consecutivo->id}}</span>
-                                            @endforeach
-                                        </div>
-                                    @endif
-                                </td>
-                                <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>
-                                <td class="px-3 text-end">
-                                    {{$ot->cant_baterias}}
-                                </td>
-                            </tr>
-                        @endforeach
-                        @elserole
+
                         @foreach($ordenes as $ot)
                             @php($importe_total += $ot->IMPORTESERVICIO)
                             @php($total_baterias += $ot->cant_baterias)
@@ -114,6 +77,13 @@
                                 <td>
                                     @if($ot->consecutivoBaterias->count() == 0)
 
+                                        @role($connection_id, 'tecnico')
+                                        <form action="{{route('consecutivo.bateria.store', [null, 'connection_id' => $connection_id])}}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
+                                            <button class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">GENERAR</button>
+                                        </form>
+                                        @endrole
                                     @else
                                         <div class="flex gap-2">
                                             @foreach($ot->consecutivoBaterias as $consecutivo)
@@ -128,7 +98,6 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @endrole
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-white">
                         <tr>
@@ -164,7 +133,9 @@
                                         {{$consecutivo->TALLER}}
                                     </td>
                                     <td class="text-center">
-                                        {{$fecha->format('y')}}{{$consecutivo->id}}
+                                        <a href="{{route('consecutivo.bateria.show', [$consecutivo->id, 'connection_id' => $connection_id])}}">
+                                            {{$consecutivo->consecutivo()}}
+                                        </a>
                                     </td>
                                     <td>
                                         {{$fecha->format('d/m/Y')}}
