@@ -38,7 +38,7 @@
 
                             <div class="flex text-xl  justify-between">
                                 <h3 class="font-bold">ESTADO:</h3>
-                                <span class="uppercase @if($ot->FECHACIERRE == null) text-green-500 @else text-red-500 @endif">{{$ot->FECHACIERRE == null ? 'Abierta' : 'Cerrada'}}</span>
+                                <span class="uppercase @if($ot->ESTADO == 1) text-green-500 @elseif ($ot->ESTADO == 9) text-yellow-500 @else text-red-500 @endif">{{$ot->estado->estado_nombre}}</span>
                             </div>
                         </div>
 

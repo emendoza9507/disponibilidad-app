@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Helpers\ResetDB;
+use App\Models\EstadoOT;
 use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,19 +14,14 @@ class OrdenTrabajoService
 {
     public function getAll($start_date, $end_date)
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
-
         return OrdenTrabajo::whereBetween('FECHAENTRADA', [$start_date, $end_date])
+            ->with('estado')
             ->orderBy('FECHAENTRADA', 'DESC')
             ->orderBy('FECHASALIDA', 'DESC');
     }
 
     public function get(string $codigoot)
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
-
         return OrdenTrabajo::withManoObras()->where('CODIGOOT', $codigoot)->first();
     }
 
@@ -60,12 +56,15 @@ class OrdenTrabajoService
             ->has('materials', '>', 0);
     }
 
-    public function getByMaestro(string $codigom, $start_date = null, $end_date = null)
+    public function getByMaestro(string $codigom, $start_date = null, $end_date = null, $hideAnuladas = false)
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
+        $query = OrdenTrabajo::where('CODIGOM', $codigom)
+            ->with('estado')
+            ->orderBy('FECHAENTRADA', 'DESC');
 
-        $query = OrdenTrabajo::where('CODIGOM', $codigom)->orderBy('FECHAENTRADA', 'DESC');
+        if($hideAnuladas) {
+            $query = $query->whereNotIn('ESTADO', EstadoOT::IDS_ESTADOS_ANULADOS);
+        }
 
         if($start_date) {
             $query = $query->where('FECHAENTRADA', '>=', $start_date);
@@ -80,30 +79,32 @@ class OrdenTrabajoService
 
     public function getByMaestroAbiertas(string $codigom)
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
-
         return OrdenTrabajo::where('CODIGOM', $codigom)
             ->whereNull('FECHACIERRE')
+            ->where('ESTADO', 1)
             ->orderBy('FECHAENTRADA', 'DESC')->get();
     }
 
     public function getByMaestroCerradas(string $codigom)
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
-
         return OrdenTrabajo::where('CODIGOM', $codigom)
             ->whereNotNull('FECHACIERRE')
+            ->where('ESTADO', 3)
+            ->orderBy('FECHAENTRADA', 'DESC')->get();
+    }
+
+    public function getByMaestroAnuladas(string $codigom)
+    {
+        return OrdenTrabajo::where('CODIGOM', $codigom)
+            ->whereIn('ESTADO', [9, 2])
             ->orderBy('FECHAENTRADA', 'DESC')->get();
     }
 
     public function getByMatricula(string $matricula, $fecha_entrada = null, $fecha_cierre = null, string $operation = '<')
     {
-        $connection = (object) session('connection', Config::get('database.connections.taller'));
-        ResetDB::setDBConfig('taller', (array) $connection);
-
-        $query = OrdenTrabajo::where('MATRICULA', $matricula);
+        $query = OrdenTrabajo::where('MATRICULA', $matricula)
+        ->with('estado')
+        ->whereNotIn('ESTADO', EstadoOT::IDS_ESTADOS_ANULADOS);
 
         if($fecha_entrada) {
             $query = $query->where('FECHAENTRADA', $operation, $fecha_entrada);
@@ -152,7 +153,9 @@ class OrdenTrabajoService
             ->select('material.CODIGOOT');
 
         return OrdenTrabajo::whereIn('CODIGOOT', $materiales)
+            ->with('estado')
             ->whereNotNull('FECHACIERRE')
+            ->whereNotIn('ESTADO', EstadoOT::IDS_ESTADOS_ANULADOS)
             ->when($codigom, function (Builder $query, string $codigom) {
                 $query->where('CODIGOM', $codigom);
             })

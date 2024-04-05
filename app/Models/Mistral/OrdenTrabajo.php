@@ -3,6 +3,7 @@
 namespace App\Models\Mistral;
 
 use App\Models\Bateria;
+use App\Models\EstadoOT;
 use App\Models\Neumatico;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +27,9 @@ class OrdenTrabajo extends Model
         });
     }
 
+    public function estado() {
+        return $this->belongsTo(EstadoOT::class, 'ESTADO', 'estado_id');
+    }
 
     public function manoObras()
     {

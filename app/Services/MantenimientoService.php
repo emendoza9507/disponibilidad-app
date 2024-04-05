@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Livewire\OrdenTrabajo\Materiales;
 use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
 use Illuminate\Database\Query\JoinClause;

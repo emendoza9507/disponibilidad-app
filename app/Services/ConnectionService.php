@@ -4,10 +4,6 @@ namespace App\Services;
 
 use App\Helpers\ResetDB;
 use App\Models\Connection;
-use App\Models\Mistral\Parametro;
-use Illuminate\Http\Client\Request;
-use Illuminate\Routing\Route;
-use Illuminate\Routing\Router;
 
 class ConnectionService
 {

@@ -23,8 +23,8 @@
                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m')}}</td>
                 <td>{{$ot->FECHASALIDA ? \Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y | h:m') : ''}}</td>
                 <td>
-                    <span class="px-2 select-none rounded-2xl text-white @if($ot->FECHACIERRE == null) bg-green-500 @else  bg-red-400  @endif">
-                        {{$ot->FECHACIERRE == null ? 'abierta' : 'cerrada'}}
+                    <span class="px-2 select-none rounded-2xl text-white @if($ot->ESTADO == 1) bg-green-500 @elseif ($ot->ESTADO == 9) bg-yellow-400 @else  bg-red-400  @endif">
+                        {{$ot->estado->estado_nombre}}
                     </span>
                 </td>
                 <td class="text-end">{{number_format($ot->IMPORTESERVICIO, 2)}}$</td>

@@ -80,7 +80,7 @@ class AutoController extends Controller
         try {
             $auto = Maestro::find($auto);
 
-            $ordenes = $ordenTrabajoService->getByMaestro($auto->CODIGOM);
+            $ordenes = $ordenTrabajoService->getByMaestro($auto->CODIGOM, null, null, true);
         } catch (\Exception $exception) {
             return redirect(route('autos.index'))->with('error', $exception->getMessage());
         }
@@ -111,13 +111,14 @@ class AutoController extends Controller
             $ordenes_total = $ordenTrabajoService->getByMaestro($auto->CODIGOM)->count();
             $ordenes_abiertas =  $ordenTrabajoService->getByMaestroAbiertas($auto->CODIGOM)->count();
             $ordenes_cerradas =  $ordenTrabajoService->getByMaestroCerradas($auto->CODIGOM)->count();
+            $ordenes_anuladas =  $ordenTrabajoService->getByMaestroAnuladas($auto->CODIGOM)->count();
         } catch (\Exception $exception) {
             return redirect(route('autos.index'))->with('error', $exception->getMessage());
         }
 
         return new JsonResponse([
             'taller' => $connection->codigo_taller,
-            'total' => $ordenes_total,
+            'total' => $ordenes_total - $ordenes_anuladas,
             'abiertas' => $ordenes_abiertas,
             'cerradas' => $ordenes_cerradas,
             'conectado' => true

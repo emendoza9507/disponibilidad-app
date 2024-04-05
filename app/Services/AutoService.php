@@ -75,6 +75,7 @@ class AutoService
         }
 
         return OrdenTrabajo::whereIn('CODIGOOT', $materiales)
+            ->with('estado')
             ->with('materials',  function ($query) use ($material) {
                 if($material != '*') {
                     $query->where('AREA', $material);
@@ -92,6 +93,7 @@ class AutoService
     public function getLastOt(string $codigom)
     {
         return OrdenTrabajo::where('CODIGOM', $codigom)
+            ->with('estado')
             ->orderBy('FECHAENTRADA', 'DESC')
             ->first();
     }
