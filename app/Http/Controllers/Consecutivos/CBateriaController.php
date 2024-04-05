@@ -79,7 +79,9 @@ class CBateriaController extends Controller
             return back();
         }
 
-        return view('consecutivo.bateria.index', compact(
+        return view('consecutivo.bateria.index', [
+            'auto' => $matricula ? $autoService->getBy($matricula)->first() : null
+        ], compact(
              'start_date', 'end_date', 'connection_id', 'connection',
             'ordenes','matricula', 'consecutivos_anteriores'
         ));

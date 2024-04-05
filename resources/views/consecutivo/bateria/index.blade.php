@@ -98,6 +98,15 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @if (count($ordenes) == 0 && isset($auto))
+                            <tr>
+                                <td colspan="8" class="text-center underline">
+                                    <a href="{{route('consecutivo.bateria.show_maestro', $auto->CODIGOM)}}">
+                                        Ver ultimas baterias cargadas
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-white">
                         <tr>
