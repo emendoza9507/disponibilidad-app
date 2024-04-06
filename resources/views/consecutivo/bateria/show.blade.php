@@ -100,7 +100,7 @@
                     <x-button onclick="history.back()" class="print:hidden relative right-10 bg-gray-600 text-black hover:text-white rounded-none">
                        @include('icons.back')
                     </x-button>
-                    <a href="{{route('consecutivo.bateria.edit', [$bateria->id])}}" class="relative right-10 inline-block">
+                    <a href="{{route('consecutivo.bateria.edit', [$bateria->id, 'connection_id'=>$connection_id])}}" class="relative right-10 inline-block">
                         <x-button class="print:hidden bg-green-600 text-black hover:text-white rounded-none">
                             @include('icons.edit')
                         </x-button>
