@@ -124,10 +124,11 @@ class CBateriaController extends Controller
         ));
     }
 
-    public function show(Bateria $bateria)
+    public function show(Request $request, Bateria $bateria)
     {
+        $connection_id = $request->query->get('connection_id');
         return view('consecutivo.bateria.show', compact(
-            'bateria'
+            'bateria', 'connection_id'
         ));
     }
 

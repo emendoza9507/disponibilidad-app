@@ -14,8 +14,15 @@ class EstadoOTSeeder extends Seeder
     public function run(): void
     {
         //
+
+
         EstadoOT::create([
             'estado_id' => '1',
+            'estado_nombre' => 'Abierta'
+        ]);
+
+        EstadoOT::create([
+            'estado_id' => '3',
             'estado_nombre' => 'Cerrada'
         ]);
 
@@ -25,13 +32,8 @@ class EstadoOTSeeder extends Seeder
         ]);
 
         EstadoOT::create([
-            'estado_id' => '3',
-            'estado_nombre' => 'Abierta'
-        ]);
-
-        EstadoOT::create([
             'estado_id' => '9',
-            'estado_nombre' => 'Anullada'
+            'estado_nombre' => 'Anulada'
         ]);
 
         EstadoOT::create([
