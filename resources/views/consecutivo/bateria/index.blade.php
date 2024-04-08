@@ -1,3 +1,10 @@
+
+@role($connection_id, 'tecnico')
+@php($isTecnico = true)
+@elserole
+@php($isTecnico = false)
+@endrole
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -77,13 +84,13 @@
                                 <td>
                                     @if($ot->consecutivoBaterias->count() == 0)
 
-                                        @role($connection_id, 'tecnico')
+                                        @if($isTecnico)
                                         <form action="{{route('consecutivo.bateria.store', [null, 'connection_id' => $connection_id])}}" method="POST">
                                             @csrf
                                             <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
                                             <button is="buttom-submit" class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">GENERAR</button>
                                         </form>
-                                        @endrole
+                                        @endif
                                     @else
                                         <div class="flex gap-2">
                                             @foreach($ot->consecutivoBaterias as $consecutivo)
@@ -110,7 +117,7 @@
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-white">
                         <tr>
-                            <th colspan="5" class="text-left uppercase">Total</th>
+                            <th colspan="6" class="text-left uppercase">Total</th>
                             <td class="text-right"><b>Importe:</b> {{number_format($importe_total, 2)}}$</td>
                             <td class="px-3 text-end"><b>BATERIAS:</b> {{$total_baterias}}</td>
                         </tr>

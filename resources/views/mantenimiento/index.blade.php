@@ -1,3 +1,10 @@
+
+@role($connection_id, 'tecnico')
+@php($isTecnico = true)
+@elserole
+@php($isTecnico = false)
+@endrole
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -66,6 +73,7 @@
                                                 </td>
                                                 <td>
                                                     <div>
+                                                        @if ($isTecnico)
                                                         <form onsubmit="confirmEliminarMantenimiento(event)" action="{{route('mantenimiento.destroy', [$mantenimiento->id, 'connection_id' => $connection_id])}}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
@@ -73,6 +81,7 @@
                                                                 @include('icons.trash')
                                                             </button>
                                                         </form>
+                                                        @endif
                                                     </div>
                                                 </td>
                                             </tr>
@@ -113,6 +122,7 @@
                                                 </td>
                                                 <td class="text-center">{{$ot->estado->estado_nombre}}</td>
                                                 <td>
+                                                    @if ($isTecnico)
                                                     <form action="{{route('mantenimiento.store', ['connection_id'=>$connection_id])}}" method="POST">
                                                         @csrf()
                                                         <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
@@ -122,6 +132,7 @@
                                                             @include('icons.plus')
                                                         </button>
                                                     </form>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -1,3 +1,8 @@
+@role($connection_id, 'tecnico')
+    @php($isTecnico = true)
+@elserole
+    @php($isTecnico = false)
+@endrole
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -25,7 +30,7 @@
                         <x-input class="rounded-none" name="end_date" type="date"
                                  value="{{$end_date->format('Y-m-d')}}"/>
 
-                        <x-button class="rounded-none h-full">BUSCAR</x-button>
+                        <x-button is="buttom-submit" class="rounded-none h-full">BUSCAR</x-button>
 
 
                         <a role="button" class="float-end clear-both inline-flex items-center px-4 py-2 bg-blue-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 rounded-none h-full"
@@ -79,7 +84,7 @@
                                 </td>
                                 <td>
                                     @if($ot->consecutivoNeumaticos->count() == 0)
-                                        @role($connection_id, 'tecnico')
+                                        @if($isTecnico)
                                         <div class="flex">
                                             <form
                                                 action="{{route('consecutivo.neumatico.store', [null, 'connection_id' => $connection_id])}}"
@@ -93,7 +98,7 @@
                                                 </button>
                                             </form>
                                         </div>
-                                        @endrole
+                                        @endif
                                     @else
                                         <div class="flex gap-2" onclick="chequearConsecutivo('{{$ot->MATRICULA}}')" >
                                             @foreach($ot->consecutivoNeumaticos as $consecutivo)
@@ -120,7 +125,7 @@
                         </tbody>
                         <tfoot class="sticky bottom-0 bg-white">
                         <tr>
-                            <th colspan="5" class="text-left uppercase">Total</th>
+                            <th colspan="6" class="text-left uppercase">Total</th>
                             <td class="text-right"><b>Importe:</b> {{number_format($importe_total, 2)}}$</td>
                             <td class="px-3 text-end"><b>NEUMATICOS:</b> {{$total_neumaticos}}</td>
                         </tr>
