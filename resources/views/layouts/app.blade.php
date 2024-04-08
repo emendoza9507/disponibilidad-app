@@ -182,6 +182,16 @@
             }
             customElements.define('select-connection', ConnectionSelect);
 
+            class ButtomSubmit extends HTMLElement {
+                connectedCallback() {
+                    this.addEventListener('click', (e) => {
+                        this.innerHTML = 'Cargando...'
+                    })
+                }
+            }
+
+            customElements.define('buttom-submit', ButtomSubmit);
+
             class EventListener {
                 _events = {};
 

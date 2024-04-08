@@ -14,7 +14,7 @@
             <div id="reporte" class="p-6 lg:p-8 bg-white border-b border-gray-200">
                 <form class="flex flex-col" action="{{route('reporte.ordenes.index')}}">
                     <div class="flex justify-between gap-2 items-end">
-                        <h3 class="uppercase text-xl font-bold">Ordenes {{$estado}} {{$connection->name}} ({{$connection->codigo_taller}})</h3>
+                        <h3 class="uppercase text-xl font-bold">Ordenes {{$estado->estado_nombre}} {{$connection->name}} ({{$connection->codigo_taller}})</h3>
                         <div class="flex gap-2 text-sm">
                             <span class="uppercase"><b>Desde:</b> {{$start_date->format('d/m/Y')}}</span>
                             <span class="uppercase"><b>Hasta:</b> {{$end_date->format('d/m/Y')}}</span>
@@ -31,9 +31,9 @@
                             <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date?->format('Y-m-d')}}"/>
 
                             <select name="estado" class="print:hidden" onchange="this.form.submit()">
-                                @foreach(['ABIERTAS', 'CERRADAS'] as $_estado)
-                                    <option value="{{$_estado}}" @if($_estado == $estado) selected @endif>
-                                        {{$_estado}}
+                                @foreach($estados as $_estado)
+                                    <option value="{{$_estado->estado_id}}" @if($_estado->estado_id == $estado->estado_id) selected @endif>
+                                        {{$_estado->estado_nombre}}
                                     </option>
                                 @endforeach
                             </select>
@@ -45,14 +45,14 @@
                                 @endforeach
                             </select>
 
-                            <x-button class="rounded-none h-full">GENERAR</x-button>
+                            <x-button is="buttom-submit" class="rounded-none h-full">GENERAR</x-button>
                         </div>
                     </div>
                 </form>
 
                 <br>
 
-                <div style="max-height: 400px" class="overflow-y-auto">
+                <div style="max-height: 400px" class="overflow-y-auto scrollable">
                     <table class="w-full">
                         <thead class="sticky top-0 bg-white">
                         <tr>
@@ -70,9 +70,9 @@
                             @php($importe_total += $ot->IMPORTESERVICIO)
                             <tr class="hover:bg-gray-100">
                                 <td class="py-3">
-                                    <a href="{{route('orden.show', $ot->CODIGOOT)}}">{{$ot->CODIGOOT}}</a>
+                                    <a href="{{route('orden.show', [$ot->CODIGOOT, 'connection_id' => $connection_id])}}">{{$ot->CODIGOOT}}</a>
                                 </td>
-                                <td><a href="{{route('autos.show', $ot->CODIGOM)}}">{{$ot->MATRICULA}}</a></td>
+                                <td><a href="{{route('autos.show', [$ot->CODIGOM, 'connection_id' => $connection_id])}}">{{$ot->MATRICULA}}</a></td>
                                 <td>{{\Carbon\Carbon::create($ot->FECHAENTRADA)->format('d/m/Y')}}</td>
                                 <td>{{$ot->KMENTRADA}}</td>
                                 <td class="text-center">{{$ot->DEPOSITOENTRADA}}</td>

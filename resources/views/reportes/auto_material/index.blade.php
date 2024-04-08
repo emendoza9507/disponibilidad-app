@@ -38,7 +38,7 @@
                                 @endforeach
                             </select>
 
-                            <x-button class="rounded-none h-full">GENERAR</x-button>
+                            <x-button is="buttom-submit" class="rounded-none h-full">GENERAR</x-button>
                         </div>
 
                         <select name="area" >
@@ -53,7 +53,7 @@
                 <br>
 
 
-                <div style="max-height: 400px" class="overflow-y-auto">
+                <div style="max-height: 400px" class="overflow-y-auto scrollable">
                     <table class="w-full">
                         <thead class="sticky top-0 bg-gray-300">
                         <tr>

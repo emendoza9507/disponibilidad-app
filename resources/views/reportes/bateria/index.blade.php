@@ -18,7 +18,7 @@
                         <x-input class="rounded-none" name="start_date" type="date" value="{{$start_date->format('Y-m-d')}}"/>
                         <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date->format('Y-m-d')}}"/>
 
-                        <x-button class="rounded-none h-full">GENERAR</x-button>
+                        <x-button is="buttom-submit" class="rounded-none h-full">GENERAR</x-button>
 
                         <x-button id="btn-alerta" type="button" class="rounded-none h-full bg-red-400">ALERTAS</x-button>
                     </div>
@@ -33,7 +33,7 @@
 
                 <br>
 
-                <div style="max-height: 400px" class="overflow-y-auto">
+                <div style="max-height: 400px" class="overflow-y-auto scrollable">
                     <table class="w-full">
                         <thead>
                         <tr>

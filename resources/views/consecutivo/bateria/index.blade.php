@@ -81,7 +81,7 @@
                                         <form action="{{route('consecutivo.bateria.store', [null, 'connection_id' => $connection_id])}}" method="POST">
                                             @csrf
                                             <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
-                                            <button class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">GENERAR</button>
+                                            <button is="buttom-submit" class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">GENERAR</button>
                                         </form>
                                         @endrole
                                     @else

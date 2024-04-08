@@ -22,7 +22,7 @@
                         <x-input class="rounded-none" name="start_date" type="date" value="{{$start_date?->format('Y-m-d')}}"/>
                         <x-input class="rounded-none" name="end_date" type="date" value="{{$end_date?->format('Y-m-d')}}"/>
 
-                        <x-button class="rounded-none h-full">GENERAR</x-button>
+                        <x-button is="buttom-submit" class="rounded-none h-full">GENERAR</x-button>
                     </div>
                     <select id="select-connection" name="connection_id" is="select-connection">
                         @foreach($connections as $connection)

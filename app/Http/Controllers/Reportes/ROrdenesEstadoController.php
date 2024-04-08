@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reportes;
 
 use App\Http\Controllers\Controller;
+use App\Models\EstadoOT;
 use App\Models\Mistral\OrdenTrabajo;
 use App\Services\ConnectionService;
 use App\Services\OrdenTrabajoService;
@@ -22,16 +23,19 @@ class ROrdenesEstadoController extends Controller
 
         if(!$connection) return redirect(route('home'));
 
-        $estado = strtoupper($request->query->get('estado', 'abiertas'));
+        $estado = $request->query->getInt('estado', '1');
 
-        $query = $ordenTrabajoService->getQueryByEstado($estado, $start_date, $end_date);
+        $estado = EstadoOT::where('estado_id', $estado)->first();
+
+        $estados = EstadoOT::all();
+        $query = $ordenTrabajoService->getQueryByEstado($estado->estado_id, $start_date, $end_date);
 
         $ordenes = $query->get();
         $combustible_tanque = $query->sum('DEPOSITOENTRADA');
 
         return view('reportes.ordenes_estado.index', compact(
             'ordenes', 'connection', 'connection_id', 'combustible_tanque', 'estado',
-            'start_date', 'end_date'
+            'start_date', 'end_date', 'estados'
         ));
     }
 }

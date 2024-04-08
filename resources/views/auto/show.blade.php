@@ -29,8 +29,8 @@
                         </div>
 
                         <div class="flex text-xl   gap-2">
-                            <h3 class="font-bold">MAESTRO:</h3>
-                            <span>{{$auto->CODIGOM}}</span>
+                            <h3 class="font-bold">CARROCERIA:</h3>
+                            <span>{{$auto->BASTIDOR}}</span>
                         </div>
 
                         <div>

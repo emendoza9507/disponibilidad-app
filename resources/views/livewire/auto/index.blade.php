@@ -71,7 +71,7 @@
                         </div>
                         <section wire:loading.remove wire:target="startDateResumen" class="flex justify-between relative gap-3">
 
-                            <div class="flex-1 " style="height: 200px; overflow-y: auto">
+                            <div class="flex-1 scrollable" style="height: 200px; overflow-y: auto">
                                 {{-- NEUMATICOS --}}
                                 <h4 class="text-xl font-bold mb-2 sticky top-0 bg-white">Neumaticos:</h4>
 
@@ -101,7 +101,7 @@
                                 </table>
                             </div>
 
-                            <div class="flex-1" style="height: 200px; overflow-y: auto">
+                            <div class="flex-1 scrollable" style="height: 200px; overflow-y: auto">
                                 {{-- BATERIAS --}}
                                 <h4 class="text-xl font-bold mb-2 sticky top-0 bg-white">Baterias:</h4>
 

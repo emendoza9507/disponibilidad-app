@@ -43,6 +43,17 @@ class AppLayout extends Component
                 ]
             ],
             (object) [
+                'label' => 'Taller',
+                'icon' => 'taller',
+                'dropdown' => [
+                    (object) [
+                        'label' => 'Mantenimientos',
+                        'icon' => 'settings',
+                        'href' => 'mantenimiento.index'
+                    ]
+                ]
+            ],
+            (object) [
                 'label' => 'Reportes',
                 'icon' => 'report',
                 'dropdown' => [
@@ -55,13 +66,13 @@ class AppLayout extends Component
                         'label' => 'Ordenes Abiertas',
                         'icon' => 'lock-open',
                         'href' => 'reporte.ordenes.index',
-                        'params' => [null,'estado' => 'abiertas']
+                        'params' => [null,'estado' => 1]
                     ],
                     (object) [
                         'label' => 'Ordenes Cerradas',
                         'icon' => 'lock-closed',
                         'href' => 'reporte.ordenes.index',
-                        'params' => [null,'estado' => 'cerradas']
+                        'params' => [null,'estado' => 3]
                     ],
                     (object) [
                         'label' => 'Prod. en Proceso',

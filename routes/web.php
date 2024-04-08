@@ -4,7 +4,6 @@ use App\Http\Controllers\AutoController;
 use App\Http\Controllers\Consecutivos\CBateriaController;
 use App\Http\Controllers\Consecutivos\CNeumaticoController;
 use App\Http\Controllers\DepartamentoController;
-use App\Http\Controllers\NeumaticoController;
 use App\Http\Controllers\OrdenTrabajoController;
 use App\Http\Controllers\Reportes\RAutoMaterialController;
 use App\Http\Controllers\Reportes\RBateriaController;
@@ -12,10 +11,10 @@ use App\Http\Controllers\Reportes\RMantenimientosController;
 use App\Http\Controllers\Reportes\RNeumaticoController;
 use App\Http\Controllers\Reportes\ROrdenesEstadoController;
 use App\Http\Controllers\Reportes\RProduccionProceso;
-use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\MantenimientoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +98,11 @@ Route::middleware([
                 Route::name('bateria.show_maestro')->get('/maestro/{maestro}', 'showMaestro');
                 Route::name('bateria.json_last_ot_with_bateria')->get('/maestro/{maestro}/last', 'jsonUltimaOTConNeumaticos');
             });
+        });
+
+        Route::resource('mantenimiento', MantenimientoController::class);
+        Route::name('mantenimiento.')->group(function() {
+
         });
     });
 });

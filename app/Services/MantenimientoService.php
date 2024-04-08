@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Mantenimiento;
 use App\Models\Mistral\Material;
 use App\Models\Mistral\OrdenTrabajo;
 use Illuminate\Database\Query\JoinClause;
@@ -22,5 +23,15 @@ class MantenimientoService
             ->whereBetween('FECHAENTRADA', [$start_date, $end_date]);
 
         return $query;
+    }
+
+    public function getAll($start_date, $end_date)
+    {
+        return Mantenimiento::whereBetween('created_at', [$start_date, $end_date]);
+    }
+
+    public function getByConnection($connection_id, $start_date, $end_date)
+    {
+        return $this->getAll($start_date, $end_date)->where('connection_id', $connection_id);
     }
 }

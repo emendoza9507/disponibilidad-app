@@ -63,7 +63,7 @@
                                             Consecutivos generados:
                                             <b>{{count($ot->neumaticos)}}</b>
                                         </span>
-                                            <button class="bg-emerald-500 px-2 rounded-md text-white hover:bg-emerald-700" wire:click="generarNeumaticos({{$current_ot->CODIGOOT}})">GENERAR</button>
+                                            <button is="buttom-submit" class="bg-emerald-500 px-2 rounded-md text-white hover:bg-emerald-700" wire:click="generarNeumaticos({{$current_ot->CODIGOOT}})">GENERAR</button>
                                         </div>
                                     @else
                                         <span class="text-blue-400">

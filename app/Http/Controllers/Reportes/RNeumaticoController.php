@@ -7,6 +7,7 @@ use App\Models\Connection;
 use App\Services\ConnectionService;
 use App\Services\NeumaticosService;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class RNeumaticoController extends Controller

@@ -79,7 +79,7 @@
                     <br>
 
                     <h3 class="text-xl bg-gray-300 border-gray-300 font-bold inline-block uppercase">Materiales</h3>
-                    <div  class="overflow-y-auto mb-5">
+                    <div class="overflow-y-auto mb-5 scrollable">
                         <table class="w-full border-2 border-gray-300">
                             <thead class="">
                             <tr>

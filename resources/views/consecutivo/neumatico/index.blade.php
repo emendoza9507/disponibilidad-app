@@ -87,6 +87,7 @@
                                                 @csrf
                                                 <input type="hidden" name="codigoot" value="{{$ot->CODIGOOT}}">
                                                 <button
+                                                    is="buttom-submit"
                                                     class="px-3 py-0 bg-red-700 hover:bg-red-900 text-white font-bold">
                                                     GENERAR
                                                 </button>

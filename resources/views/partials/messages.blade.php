@@ -17,9 +17,10 @@ $bg_colors = [
             @endforeach
         </div>
     </div>
-    <script>
-        function removeMessage($msg) {
-            setTimeout(function (){ $msg.remove() }, 1000)
-        }
-    </script>
 @endif
+
+<script>
+    function removeMessage($msg) {
+        setTimeout(function (){ $msg.remove() }, 1000)
+    }
+</script>

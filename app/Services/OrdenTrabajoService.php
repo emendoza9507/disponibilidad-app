@@ -25,14 +25,12 @@ class OrdenTrabajoService
         return OrdenTrabajo::withManoObras()->where('CODIGOOT', $codigoot)->first();
     }
 
-    public function getQueryByEstado(&$estado, $start_date, $end_date)
+    public function getQueryByEstado($estado, $start_date, $end_date)
     {
-        $estado = strtoupper($estado);
-
-        $query = OrdenTrabajo::orderBy('CODIGOOT', 'desc');
+        $query = OrdenTrabajo::orderBy('CODIGOOT', 'desc')->where('ESTADO', $estado);
 
         switch ($estado) {
-            case 'CERRADAS': {
+            case 3 : {
                 $query->whereNotNull('FECHACIERRE')
                     ->where('FECHAENTRADA', '>=', $start_date)
                     ->where('FECHACIERRE', '<=', $end_date->copy()->addDay(1));
@@ -41,8 +39,6 @@ class OrdenTrabajoService
             default: {
                 $query->whereNull('FECHACIERRE')
                     ->whereBetween('FECHAENTRADA', [$start_date, $end_date->copy()->addDay(1)]);
-
-                $estado = 'ABIERTAS';
             }
         }
 

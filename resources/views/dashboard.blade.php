@@ -64,7 +64,7 @@
                             </h2>
                         </div>
 
-                        <div class="mt-4" @style(['max-height: 200px', 'overflow: auto'])>
+                        <div class="mt-4 scrollable" @style(['max-height: 200px', 'overflow: auto'])>
                             <table is="connection-state-loader" class="w-full">
                                 <thead class="sticky top-0 bg-gray-200">
                                 </thead>

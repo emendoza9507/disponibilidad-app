@@ -27,7 +27,7 @@
 
                 <br>
 
-                <div style="max-height: 400px" class="overflow-y-auto">
+                <div style="max-height: 400px" class="overflow-y-auto scrollable">
                     <table class="w-full">
                         <thead class="sticky top-0 bg-white">
                         <tr>
