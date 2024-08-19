@@ -47,6 +47,11 @@ class AppLayout extends Component
                 'icon' => 'taller',
                 'dropdown' => [
                     (object) [
+                        'label' => 'Control Acceso',
+                        'icon' => 'qr',
+                        'href' => 'control_acceso.index'
+                    ],
+                    (object) [
                         'label' => 'Mantenimientos',
                         'icon' => 'settings',
                         'href' => 'mantenimiento.index'

@@ -14,6 +14,7 @@ use App\Http\Controllers\Reportes\RProduccionProceso;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\ControlAccesoController;
 use App\Http\Controllers\MantenimientoController;
 
 /*
@@ -104,5 +105,7 @@ Route::middleware([
         Route::name('mantenimiento.')->group(function() {
 
         });
+
+        Route::resource('control_acceso', ControlAccesoController::class);
     });
 });
